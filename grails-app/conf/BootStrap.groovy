@@ -4,7 +4,8 @@ class BootStrap {
     def init = { servletContext ->
 		if(!Role.count()){
 			new Role(name:'Dev').save(failOnError:true)
-			new Role(name:'QA').save(faileOnError:true)
+			new Role(name:'QA').save(failOnError:true)
+			new Role(name:'Manager').save(failOnError:true)
 		}
 		if(!Person.count()){
 			new Person(name:'Patrick Escarcega',role:Role.findByName('Dev')).save(failOnError:true)
@@ -15,6 +16,8 @@ class BootStrap {
 			new Person(name:'Michelle Wu',role:Role.findByName('QA')).save(failOnError:true)
 			new Person(name:'Nathan Flint',role:Role.findByName('QA')).save(failOnError:true)
 			new Person(name:'Laurie Soetanto',role:Role.findByName('QA')).save(failOnError:true)
+			new Person(name:'Eric Peterson',role:Role.findByName('QA')).save(failOnError:true)
+			new Person(name:'Paul McCallick',role:Role.findByName('Manager')).save(failOnError:true)
 		}
 		if(!Question.count()){
 			new Question(text:'Works well with a team').save(failOnError:true)
@@ -28,63 +31,17 @@ class BootStrap {
 			new Question(text:'Writes great tests').save(failOnError:true)
 		}
 		if(!Answer.count()){
-			new Answer(text:'Drives the team not to do this',value:1).save(failOnError:true)
-			new Answer(text:'Doesn\'t Do this',value:2).save(failOnError:true)
-			new Answer(text:'Does This',value:3).save(failOnError:true)
-			new Answer(text:'Does This Well',value:4).save(failOnError:true)
-			new Answer(text:'Drives the team to do this',value:5).save(failOnError:true)
+			new Answer(text:'Strongly Disagree',value:1).save(failOnError:true)
+			new Answer(text:'Disagree',value:2).save(failOnError:true)
+			new Answer(text:'Nuetral',value:3).save(failOnError:true)
+			new Answer(text:'Agree',value:4).save(failOnError:true)
+			new Answer(text:'Strongly Agree',value:5).save(failOnError:true)
 		}
 		if(!Review.count()){
-			Person.list().each {p -> new Review(person:p).save(failOnError:true)  }
+			Person.findAllByRole(Role.findByName('Dev')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
+			Person.findAllByRole(Role.findByName('QA')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
 		}
-		if(!Response.count()){
-			File file = new File('C:\\Documents and Settings\\paulm\\My Documents\\PPAStuff\\ReviewResults.2010.Q1\\Team.csv')
-			def comments = 0
-			def questions = []
-			file.eachLine{line,number->
-				
-				if(number==1){
-					//get questions
-					def qs =  line.split(',')
-					qs.eachWithIndex {q,column ->
-						if(column >0){
-							if(q== "Additional Comments"){
-								comments = column
-							}
-							else{
-								println('finding question:'  + q + ' at col ' + column)
-								def qu = Question.findByText(q)
-								if(qu == null){
-									throw new Exception("unknown question" + q)
-								}
-								questions[column] = qu
 
-							}
-						}
-							
-					}
-				}
-				else{
-					//now insert responses
-					def resp =  line.split(',')
-					def p = Person.findByName(resp[0])
-					if(p==null){throw new Exception("unknown person at line " + number)}
-					def r = Review.findByPerson(p)
-					if(r==null){throw new Exception("unknown review at line " + number)}
-					resp.eachWithIndex {res,col -> 
-						if(col > 0 && col!= comments){
-							def a = Answer.findByText(res)
-							if(a==null){throw new Exception("unknown answer at line " + number + "col: " + col)}
-							if(questions[col] == null){throw new Exception("unknown question at line " + number + "col: " + col)}
-							new Response(review:r,answer:a,question:questions[col]).save(failOnError:true)
-						}
-						if(col==comments){
-							new Comment(review:r,text:res).save(failOnError:true)
-						}
-					}
-				}
-			}
-		}
 
     }
     def destroy = {

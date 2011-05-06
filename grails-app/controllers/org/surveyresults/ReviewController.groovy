@@ -3,10 +3,14 @@ package org.surveyresults
 class ReviewController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	
+
 
     def index = {
         redirect(action: "list", params: params)
     }
+	
+
 
     def list = {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
@@ -14,7 +18,7 @@ class ReviewController {
     }
 
     def create = {
-        def reviewInstance = new Review()
+        def reviewInstance = new Review(reviewee:Person.findByName('Patrick Escarcega'))
         reviewInstance.properties = params
         return [reviewInstance: reviewInstance]
     }
@@ -79,22 +83,5 @@ class ReviewController {
         }
     }
 
-    def delete = {
-        def reviewInstance = Review.get(params.id)
-        if (reviewInstance) {
-            try {
-                reviewInstance.delete(flush: true)
-                flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'review.label', default: 'Review'), params.id])}"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'review.label', default: 'Review'), params.id])}"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'review.label', default: 'Review'), params.id])}"
-            redirect(action: "list")
-        }
-    }
+
 }

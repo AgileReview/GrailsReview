@@ -24,7 +24,7 @@
                         
                             <g:sortableColumn property="id" title="${message(code: 'review.id.label', default: 'Id')}" />
                         
-                            <th><g:message code="review.person.label" default="Person" /></th>
+                            <th><g:message code="review.reviewee.label" default="Person" /></th>
                         
                         </tr>
                     </thead>
@@ -32,9 +32,9 @@
                     <g:each in="${reviewInstanceList}" status="i" var="reviewInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                         
-                            <td><g:link action="show" id="${reviewInstance.id}">${fieldValue(bean: reviewInstance, field: "id")}</g:link></td>
+                            <td><g:link controller="evaluation" action="create" params="[reviewID:reviewInstance.id]">${fieldValue(bean: reviewInstance, field: "id")}</g:link></td>
                         
-                            <td>${fieldValue(bean: reviewInstance, field: "person")}</td>
+                            <td>${fieldValue(bean: reviewInstance, field: "reviewee")}</td>
                         
                         </tr>
                     </g:each>

@@ -68,7 +68,7 @@ log4j = {
     // appender:
     //
     //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -84,4 +84,5 @@ log4j = {
            'net.sf.ehcache.hibernate'
 
     warn   'org.mortbay.log'
+	//debug  'org.hibernate'
 }

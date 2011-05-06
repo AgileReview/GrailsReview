@@ -3,9 +3,9 @@ package org.surveyresults
 class Review {
 
 	
-	Person person
-	static hasMany =[responses:Response,comments:Comment]
-
+	Person reviewee
+	static hasMany =[evaluations:Evaluation,comments:Comment]
+	String quarter
 	
     static constraints = {
     }

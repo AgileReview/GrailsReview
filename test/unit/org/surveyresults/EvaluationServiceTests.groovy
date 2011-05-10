@@ -11,7 +11,7 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
-    void test_when_creating_a_blank_review_all_questions_are_available_in_order() {
+    void test_when_creating_a_blank_evaluation_all_questions_are_available_in_order() {
 		//generate exactly two questions
 		def reviews = []
 		def responses = []
@@ -19,10 +19,10 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 		mockDomain(Response,[])
 		mockDomain(Evaluation,[])
 		mockDomain(Question,[new Question(id: 2,text:'who what'),new Question(id:1,text: 'what where')])
-		mockDomain(TeamMember,[new TeamMember(name:'Patrick Escarcega')])
 		def service = new EvaluationService()
+		
 		def review = new Review()
-		def evaluation = service.createBlankEvaluation(review)
+		def evaluation = service.createBlankEvaluation(review,new TeamMember(name:'Patrick Escarcega'))
 		assert(evaluation.class ==Evaluation)
 		assertEquals review.evaluations.size(),1
 		assertEquals evaluation.responses.size(), 2

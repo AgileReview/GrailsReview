@@ -11,12 +11,32 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 	
+
+	
+	void test_creating_when_user_is_not_logged_in_redirects_to_login_page(){
+		def controller = new EvaluationController()
+		controller.teamMemberService = mock_current_user(null)
+		controller.create()
+		assertEquals controller.redirectArgs.action,'login'
+		assertEquals controller.redirectArgs.controller,'teamMember'
+	}
+	
+	void test_saving_when_user_is_not_logged_in_redirects_to_login_page(){
+		def controller = new EvaluationController()
+		controller.teamMemberService = mock_current_user(null)
+		controller.save()
+		assertEquals controller.redirectArgs.action,'login'
+		assertEquals controller.redirectArgs.controller,'teamMember'
+	
+	}
+	
 	void test_saving_an_evaluation_deep_saves_and_redirects_to_review_controller(){
+		def teamMember = new TeamMember(id:1,name:'foo')
 		mockDomain(Question,[new Question(id:1,text:'foo'),new Question(id:2,text:'bar')])
 		mockDomain(Review,[new Review(id:1)])
 		mockDomain(Evaluation,[])
 		mockDomain(Response,[])
-		mockDomain(TeamMember,[new TeamMember(id:1,name:'foo')])
+		mockDomain(TeamMember,[teamMember])
 		mockDomain(Answer,[new Answer(id:1,text:'foo',value:1)])
 		def controller = new EvaluationController()
 		controller.params['review.id'] = 1
@@ -24,15 +44,16 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		controller.params['responses[0].answer.id'] = "1"
 		controller.params['responses[1].question.id'] = "2"
 		controller.params['responses[1].answer.id'] = "1"
-		controller.params['responder.id'] = "1"
 		
+		controller.teamMemberService = mock_current_user(teamMember)
 		controller.save()
+		
 		def eval =  Evaluation.get(1)
 		assertEquals eval.responses.size(),2
 		def resp =  eval.responses.find {r -> r.question.id==2 }
 		assertNotNull resp
 		assertEquals resp.answer.id,1
-		
+		assertEquals eval.responder.name,'foo'
 		assertEquals "review",controller.redirectArgs.controller
 		assertEquals "list",controller.redirectArgs.action
 		
@@ -54,20 +75,30 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		def evaluation = new Evaluation()
 		def evaluationServiceControl = mockFor(EvaluationService)
 		def reviewParam
-		evaluationServiceControl.demand.createBlankEvaluation(){r -> reviewParam=r; return evaluation}
-		
+		def userParam
+		evaluationServiceControl.demand.createBlankEvaluation(){r,x -> reviewParam=r;userParam = x; return evaluation}
+
+		def user = new TeamMember(name:'Patrick Escarcega')
+
 		def controller = new EvaluationController()
 		controller.params.reviewID = reviewID
 		controller.evaluationService = evaluationServiceControl.createMock()
+		controller.teamMemberService = mock_current_user(user )
 		def response = controller.create()['evaluationViewModel']
 		//make sure response is the view model we're after (do we need a view model yet?)
 		assertNotNull response
 		assertTrue response instanceof EvaluationViewModel
 		assertEquals evaluation, response.evaluation
 		assertEquals reviewParam, review
+		assertEquals userParam,user
 		assertEquals response.answers.size(), 3
 		assertEquals response.answers[2].text, 'ugly'
-		
-		
 	}
+	
+	def mock_current_user(def user){
+		def teamMemberServiceController = mockFor(TeamMemberService)
+		teamMemberServiceController.demand.getCurrentTeamMember(){user}
+		teamMemberServiceController.createMock()
+	}
+	
 }

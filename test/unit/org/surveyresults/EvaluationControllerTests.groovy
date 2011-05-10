@@ -11,12 +11,12 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 	
-	void test_saving_an_evaluation_deep_saves(){
+	void test_saving_an_evaluation_deep_saves_and_redirects_to_review_controller(){
 		mockDomain(Question,[new Question(id:1,text:'foo'),new Question(id:2,text:'bar')])
 		mockDomain(Review,[new Review(id:1)])
 		mockDomain(Evaluation,[])
 		mockDomain(Response,[])
-		mockDomain(Person,[new Person(id:1,name:'foo')])
+		mockDomain(TeamMember,[new TeamMember(id:1,name:'foo')])
 		mockDomain(Answer,[new Answer(id:1,text:'foo',value:1)])
 		def controller = new EvaluationController()
 		controller.params['review.id'] = 1
@@ -27,8 +27,15 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		controller.params['responder.id'] = "1"
 		
 		controller.save()
-		//assertNotNull eval.review
-		//eval.save(failOnError:true)
+		def eval =  Evaluation.get(1)
+		assertEquals eval.responses.size(),2
+		def resp =  eval.responses.find {r -> r.question.id==2 }
+		assertNotNull resp
+		assertEquals resp.answer.id,1
+		
+		assertEquals "review",controller.redirectArgs.controller
+		assertEquals "list",controller.redirectArgs.action
+		
 	}
 
 	void test_create_provides_an_evaluation_from_evaluation_service_and_provides_all_answers(){

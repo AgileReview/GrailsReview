@@ -10,18 +10,18 @@
     <body>
     <div>Please complete review for ${evaluationViewModel.evaluation.review.reviewee.name}</div>
     <g:form action="save" >
-    <g:hiddenField name="evaluation.review.id" value="${evaluationViewModel.evaluation.review.id}"></g:hiddenField>
+    <g:hiddenField name="review.id" value="${evaluationViewModel.evaluation.review.id}"></g:hiddenField>
     <div class="dialog">
     	<table>
     	
     	<g:each var="resp" status="i" in="${evaluationViewModel.evaluation.responses.sort{it.question.id}}">
-    		<g:hiddenField name="evaluation.response[${i}].question.id" value="${resp.question.id}"></g:hiddenField>
+    		<g:hiddenField name="response[${i}].question.id" value="${resp.question.id}"></g:hiddenField>
     		
     		<tr><td>${resp.question.id }</td><td>${resp.question.text}</td>
     		<td>
     		
     		<g:each var="answer" in="${evaluationViewModel.answers}">
-    		<g:radio name="evaluation.response[${i}].answer.id" value="${answer.id}"/>${answer.value}
+    		<g:radio name="response[${i}].answer.id" value="${answer.id}"/>${answer.value}
     		</g:each>
     		</td>
     		</tr>

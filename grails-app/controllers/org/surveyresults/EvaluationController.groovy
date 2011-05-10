@@ -13,5 +13,6 @@ class EvaluationController {
 	def save = {
 		def eval = new Evaluation(params)
 		eval.save(failOnError:true)
+		redirect(controller:"review",action:"list")
 	}
 }

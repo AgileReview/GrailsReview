@@ -7,17 +7,17 @@ class BootStrap {
 			new Role(name:'QA').save(failOnError:true)
 			new Role(name:'Manager').save(failOnError:true)
 		}
-		if(!Person.count()){
-			new Person(name:'Patrick Escarcega',role:Role.findByName('Dev')).save(failOnError:true)
-			new Person(name:'Dave Perry',role:Role.findByName('Dev')).save(failOnError:true)
-			new Person(name:'Josh Rolstad',role:Role.findByName('Dev')).save(failOnError:true)
-			new Person(name:'Sumair Pervaiz',role:Role.findByName('Dev')).save(failOnError:true)
-			new Person(name:'Mary Panza',role:Role.findByName('QA')).save(failOnError:true)
-			new Person(name:'Michelle Wu',role:Role.findByName('QA')).save(failOnError:true)
-			new Person(name:'Nathan Flint',role:Role.findByName('QA')).save(failOnError:true)
-			new Person(name:'Laurie Soetanto',role:Role.findByName('QA')).save(failOnError:true)
-			new Person(name:'Eric Peterson',role:Role.findByName('QA')).save(failOnError:true)
-			new Person(name:'Paul McCallick',role:Role.findByName('Manager')).save(failOnError:true)
+		if(!TeamMember.count()){
+			new TeamMember(name:'Patrick Escarcega',role:Role.findByName('Dev')).save(failOnError:true)
+			new TeamMember(name:'Dave Perry',role:Role.findByName('Dev')).save(failOnError:true)
+			new TeamMember(name:'Josh Rolstad',role:Role.findByName('Dev')).save(failOnError:true)
+			new TeamMember(name:'Sumair Pervaiz',role:Role.findByName('Dev')).save(failOnError:true)
+			new TeamMember(name:'Mary Panza',role:Role.findByName('QA')).save(failOnError:true)
+			new TeamMember(name:'Michelle Wu',role:Role.findByName('QA')).save(failOnError:true)
+			new TeamMember(name:'Nathan Flint',role:Role.findByName('QA')).save(failOnError:true)
+			new TeamMember(name:'Laurie Soetanto',role:Role.findByName('QA')).save(failOnError:true)
+			new TeamMember(name:'Eric Peterson',role:Role.findByName('QA')).save(failOnError:true)
+			new TeamMember(name:'Paul McCallick',role:Role.findByName('Manager')).save(failOnError:true)
 		}
 		if(!Question.count()){
 			new Question(text:'Works well with a team').save(failOnError:true)
@@ -38,8 +38,8 @@ class BootStrap {
 			new Answer(text:'Strongly Agree',value:5).save(failOnError:true)
 		}
 		if(!Review.count()){
-			Person.findAllByRole(Role.findByName('Dev')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
-			Person.findAllByRole(Role.findByName('QA')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
+			TeamMember.findAllByRole(Role.findByName('Dev')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
+			TeamMember.findAllByRole(Role.findByName('QA')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
 		}
 
 

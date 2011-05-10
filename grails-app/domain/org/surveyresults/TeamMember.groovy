@@ -1,9 +1,10 @@
 package org.surveyresults
 
-class Person {
+class TeamMember {
 	
 	String name
 	Role role
+
 
     static constraints = {
     }

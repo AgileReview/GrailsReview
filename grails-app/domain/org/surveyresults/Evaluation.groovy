@@ -1,18 +1,18 @@
 package org.surveyresults
 
+import org.apache.commons.collections.Factory
 import org.apache.commons.collections.ListUtils
 
 class Evaluation {
 
 	
-	//Person responder
-	//static hasMany =[responses:Response]
-	//static belongsTo=[review:Review]
-	//Comment comment
-	List x = new ListUtils.lazyList()
+	TeamMember responder
+	static hasMany =[responses:Response]
+	static belongsTo=[review:Review]
+	Comment comment
 	static constraints = {
-		//comment(nullable:true)
+		comment(nullable:true)
 	}
 	
-	//List responses = new ListUtils.lazyList()//new ArrayList(),{new Response()} as Factory)
+	List responses = ListUtils.lazyList([],{new Response()} as Factory)
 }

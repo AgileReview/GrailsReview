@@ -18,7 +18,7 @@ class ReviewController {
     }
 
     def create = {
-        def reviewInstance = new Review(reviewee:Person.findByName('Patrick Escarcega'))
+        def reviewInstance = new Review(reviewee:TeamMember.findByName('Patrick Escarcega'))
         reviewInstance.properties = params
         return [reviewInstance: reviewInstance]
     }

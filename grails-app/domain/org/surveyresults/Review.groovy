@@ -3,7 +3,7 @@ package org.surveyresults
 class Review {
 
 	
-	Person reviewee
+	TeamMember reviewee
 	static hasMany =[evaluations:Evaluation,comments:Comment]
 	String quarter
 	

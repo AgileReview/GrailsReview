@@ -19,7 +19,7 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 		mockDomain(Response,[])
 		mockDomain(Evaluation,[])
 		mockDomain(Question,[new Question(id: 2,text:'who what'),new Question(id:1,text: 'what where')])
-		mockDomain(Person,[new Person(name:'Patrick Escarcega')])
+		mockDomain(TeamMember,[new TeamMember(name:'Patrick Escarcega')])
 		def service = new EvaluationService()
 		def review = new Review()
 		def evaluation = service.createBlankEvaluation(review)

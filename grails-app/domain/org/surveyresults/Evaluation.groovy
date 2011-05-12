@@ -2,6 +2,7 @@ package org.surveyresults
 
 import org.apache.commons.collections.Factory
 import org.apache.commons.collections.ListUtils
+import org.hibernate.cache.ReadWriteCache.Item;
 
 class Evaluation {
 
@@ -12,6 +13,11 @@ class Evaluation {
 	Comment comment
 	static constraints = {
 		comment(nullable:true)
+		responses(validator: {
+			if (it.findAll{resp -> resp.answer == null}.size() > 0) return ['All questions must be answered']
+		})
+
+
 	}
 	
 	List responses = ListUtils.lazyList([],{new Response()} as Factory)

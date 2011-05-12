@@ -1,6 +1,8 @@
 package org.surveyresults
 
 import grails.test.*
+import groovy.mock.interceptor.MockFor
+import groovy.mock.interceptor.StubFor
 
 class EvaluationControllerTests extends ControllerUnitTestCase {
     protected void setUp() {
@@ -11,8 +13,6 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 	
-
-	
 	void test_creating_when_user_is_not_logged_in_redirects_to_login_page(){
 		def controller = new EvaluationController()
 		controller.teamMemberService = mock_current_user(null)
@@ -22,6 +22,7 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 	}
 	
 	void test_saving_when_user_is_not_logged_in_redirects_to_login_page(){
+		
 		def controller = new EvaluationController()
 		controller.teamMemberService = mock_current_user(null)
 		controller.save()
@@ -59,6 +60,21 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		
 	}
 
+	void test_saving_an_invalid_evalution_redirects_to_create(){
+		mockDomain(Answer,[])
+		def mock = new MockFor(Evaluation)
+		mock.demand.setResponder{}
+		mock.demand.validate{ false}
+		
+		def controller = new EvaluationController()
+		controller.teamMemberService = mock_current_user(new TeamMember(id:1,name:'foo'))
+		mock.use{
+			controller.save()
+		}
+		assertEquals "create",controller.renderArgs.view
+		
+	}
+
 	void test_create_provides_an_evaluation_from_evaluation_service_and_provides_all_answers(){
 		
 		//mock Answers
@@ -67,6 +83,7 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 				new Answer(id:2,value: 2,text: 'bad'),
 				new Answer(id:3,value:3,text:'ugly')]
 		mockDomain(Answer,answers)
+		mockDomain(Evaluation,[])
 		
 		//create mocks for rewiewService
 		def reviewID = 100
@@ -88,11 +105,12 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		//make sure response is the view model we're after (do we need a view model yet?)
 		assertNotNull response
 		assertTrue response instanceof EvaluationViewModel
-		assertEquals evaluation, response.evaluation
+		assertEquals evaluation, response.evaluationInstance
 		assertEquals reviewParam, review
 		assertEquals userParam,user
 		assertEquals response.answers.size(), 3
 		assertEquals response.answers[2].text, 'ugly'
+		assertEquals 0,evaluation.errors.allErrors.size()
 	}
 	
 	def mock_current_user(def user){

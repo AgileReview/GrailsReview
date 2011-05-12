@@ -8,14 +8,19 @@
         <title><g:message code="default.create.label" args="[entityName]" /></title>
     </head>
     <body>
-    <div>Please complete review for ${evaluationViewModel.evaluation.review.reviewee.name}</div>
+    <g:hasErrors bean="${evaluationViewModel.evaluationInstance}">
+    <div class="errors">
+        <g:renderErrors bean="${evaluationViewModel.evaluationInstance}" as="list" />
+    </div>
+    </g:hasErrors>
+    <div>Please complete review for ${evaluationViewModel.evaluationInstance.review.reviewee.name}</div>
     <g:form action="save" >
-    <g:hiddenField name="review.id" value="${evaluationViewModel.evaluation.review.id}"></g:hiddenField>
+    <g:hiddenField name="review.id" value="${evaluationViewModel.evaluationInstance.review.id}"></g:hiddenField>
     <div class="dialog">
     	<table>
     	
-    	<g:each var="resp" status="i" in="${evaluationViewModel.evaluation.responses.sort{it.question.id}}">
-    		<g:hiddenField name="response[${i}].question.id" value="${resp.question.id}"></g:hiddenField>
+    	<g:each var="resp" status="i" in="${evaluationViewModel.evaluationInstance.responses.sort{it.question.id}}">
+    		<g:hiddenField name="responses[${i}].question.id" value="${resp.question.id}"></g:hiddenField>
     		
     		<tr><td>${resp.question.id }</td><td>${resp.question.text}</td>
     		<td>

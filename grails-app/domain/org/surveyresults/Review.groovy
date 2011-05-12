@@ -4,9 +4,9 @@ class Review {
 
 	
 	TeamMember reviewee
-	static hasMany =[evaluations:Evaluation,comments:Comment]
+	static hasMany =[evaluations:Evaluation]
 	String quarter
-	
+		
     static constraints = {
     }
 }

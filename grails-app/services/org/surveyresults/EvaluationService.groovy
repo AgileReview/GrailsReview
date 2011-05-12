@@ -2,7 +2,7 @@ package org.surveyresults
 
 class EvaluationService {
 
-    static transactional = true
+    static transactional = false
 	
 	TeamMemberService teamMemberService
 
@@ -11,6 +11,6 @@ class EvaluationService {
 		def evaluation = new Evaluation(responder:responder)
 		review.addToEvaluations(evaluation)
 		Question.list().toArray().each(){q -> evaluation.addToResponses(new Response(question:q))}
-		evaluation
+		return evaluation
     }
 }

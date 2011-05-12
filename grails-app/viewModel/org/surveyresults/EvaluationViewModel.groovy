@@ -2,7 +2,7 @@ package org.surveyresults
 
 
 class EvaluationViewModel {
-	Evaluation evaluation
+	Evaluation evaluationInstance
 	def answers = []
 	
 }

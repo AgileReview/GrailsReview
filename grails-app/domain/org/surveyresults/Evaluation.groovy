@@ -14,7 +14,8 @@ class Evaluation {
 	static constraints = {
 		comment(nullable:true)
 		responses(validator: {
-			if (it.findAll{resp -> resp.answer == null}.size() > 0) return ['All questions must be answered']
+			if (it.findAll{resp -> resp.answer == null}.size() > 0) 
+				return ['incomplete.evaluation']
 		})
 
 

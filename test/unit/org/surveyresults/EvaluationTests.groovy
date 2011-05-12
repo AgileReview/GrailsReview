@@ -17,7 +17,7 @@ class EvaluationTests extends GrailsUnitTestCase {
 		eval.addToResponses(new Response(question:new Question()))
 		
 		assertFalse eval.validate()
-		assertEquals 1,eval.errors.allErrors.size()
+		assertEquals eval.errors.getFieldError('responses').code,'incomplete.evaluation' 
 		
     }
 	void test_validating_an_eval_with_complete_answers_passes() {
@@ -25,8 +25,8 @@ class EvaluationTests extends GrailsUnitTestCase {
 		def eval = new Evaluation(responder:new TeamMember(),review:new Review())
 		eval.addToResponses(new Response(question:new Question(),answer:new Answer()))
 
-		assertTrue eval.validate()
-		assertEquals 0,eval.errors.allErrors.size()
+		assertNull eval.validate()
+		
 		
 	}
 }

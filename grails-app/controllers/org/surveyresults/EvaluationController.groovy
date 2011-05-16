@@ -4,15 +4,15 @@ class EvaluationController {
 
 	EvaluationService evaluationService
 	TeamMemberService teamMemberService
-	def create = {
+	def update = {
 		def currentUser = teamMemberService.getCurrentTeamMember(session)
 		if(currentUser == null){
 			redirect(action:'login',controller:'teamMember')
 			return
 		}
-		def review = Review.get(params.reviewID)
-		def evalInstance = evaluationService.createBlankEvaluation(review,currentUser)
-		def viewModel = new EvaluationViewModel(evaluationInstance: evalInstance)
+		def evaluation = Evaluation.get(params.evaluationID)
+		
+		def viewModel = new EvaluationViewModel(evaluationInstance: evaluation)
 		viewModel.answers = Answer.findAll()
 		[evaluationViewModel:viewModel]
 	}
@@ -36,7 +36,7 @@ class EvaluationController {
 			def viewModel = new EvaluationViewModel(evaluationInstance: eval)
 			viewModel.answers = Answer.findAll()
 			
-			render(view:"create",model:[evaluationViewModel:viewModel])
+			render(view:"update",model:[evaluationViewModel:viewModel])
 		}
 
 		

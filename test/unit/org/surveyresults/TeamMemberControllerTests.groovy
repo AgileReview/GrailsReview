@@ -41,18 +41,18 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 		assertEquals 'login',controller.redirectArgs.action
 	}
 	
-	void test_index_returns_a_list_of_reviews_to_complete(){
-		def reviews = [new Review(),new Review()]
+	void test_index_returns_a_list_of_evaluations_to_complete(){
+		def evaluations = [new Evaluation(),new Evaluation()]
 		def teamMember = new TeamMember()
 		def rctrl = mockFor(ReviewService)
 		def tParam
-		rctrl.demand.reviewsLeftToComplete(){t -> tParam=t;reviews}
+		rctrl.demand.evaluationsLeftToComplete(){t -> tParam=t;evaluations}
 		def controller = new TeamMemberController()
 		controller.teamMemberService = mock_current_user(teamMember)
 		controller.reviewService = rctrl.createMock()
 		
 		def viewModel = controller.index()['teamMemberViewModel']
-		assertSame reviews,viewModel.reviewsToComplete
+		assertSame evaluations,viewModel.evaluationsToComplete
 		assertSame teamMember,viewModel.teamMember
 		assertSame tParam,teamMember
 	}

@@ -7,7 +7,7 @@ class TeamMemberController {
 
     def index = { 
 		def currentUser = teamMemberService.getCurrentTeamMember(session)
-		def viewModel = new TeamMemberViewModel(reviewsToComplete:reviewService.reviewsLeftToComplete(currentUser),teamMember:currentUser)
+		def viewModel = new TeamMemberViewModel(evaluationsToComplete:reviewService.evaluationsLeftToComplete(currentUser),teamMember:currentUser)
 		['teamMemberViewModel':viewModel]
 	}
 	

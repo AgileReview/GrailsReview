@@ -17,7 +17,7 @@ class BootStrap {
 			new TeamMember(name:'Nathan Flint',role:Role.findByName('QA'),email:'nflint@paraport.com',password:'nathan').save(failOnError:true)
 			new TeamMember(name:'Laurie Soetanto',role:Role.findByName('QA'),email:'lsoetanto@paraport.com',password:'laurie').save(failOnError:true)
 			new TeamMember(name:'Eric Peterson',role:Role.findByName('QA'),email:'epeterson@paraport.com',password:'eric').save(failOnError:true)
-			new TeamMember(name:'Paul McCallick',role:Role.findByName('Manager'),email:'pmccallick@paraport.com',password:'paul').save(failOnError:true)
+			//new TeamMember(name:'Paul McCallick',role:Role.findByName('Manager'),email:'pmccallick@paraport.com',password:'paul').save(failOnError:true)
 		}
 		if(!Question.count()){
 			new Question(text:'Works well with a team').save(failOnError:true)
@@ -38,8 +38,10 @@ class BootStrap {
 			new Answer(text:'Strongly Agree',value:5).save(failOnError:true)
 		}
 		if(!Review.count()){
-			TeamMember.findAllByRole(Role.findByName('Dev')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
-			TeamMember.findAllByRole(Role.findByName('QA')).each {p -> new Review(reviewee:p,quarter:'2nd Quarter 2011').save(failOnError:true)  }
+			
+			def rs = new ReviewService()
+			rs.evaluationService = new EvaluationService()
+			TeamMember.list().each { t-> rs.createBlankReview(t,'z').save(failOnError:true)}
 		}
 
 

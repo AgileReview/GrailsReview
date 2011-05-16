@@ -1,7 +1,7 @@
 package org.surveyresults
 
 class TeamMemberViewModel {
-	def reviewsToComplete = []
+	def evaluationsToComplete = []
 	def resultsToView = []
 	TeamMember teamMember
 

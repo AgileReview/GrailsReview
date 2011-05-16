@@ -10,8 +10,8 @@
 
     <div>Please complete reviews for the following team members:</div>
     <div>
-    <g:each var="review" in="${teamMemberViewModel.reviewsToComplete}">
-    <span><g:link controller="evaluation" action="create" params="[reviewID:review.id]">${review.reviewee.name}</g:link></span><br>
+    <g:each var="evaluation" in="${teamMemberViewModel.evaluationsToComplete}">
+    <span><g:link controller="evaluation" action="update" params="[evaluationID:evaluation.id]">${evaluation.review.reviewee.name}</g:link></span><br>
     </g:each>
     
     </div>

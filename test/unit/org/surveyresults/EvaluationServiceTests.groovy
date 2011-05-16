@@ -24,10 +24,12 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 		def review = new Review()
 		def evaluation = service.createBlankEvaluation(review,new TeamMember(name:'Patrick Escarcega'))
 		assert(evaluation.class ==Evaluation)
-		assertEquals review.evaluations.size(),1
+		assertSame review,evaluation.review
 		assertEquals evaluation.responses.size(), 2
 		assertNotNull evaluation.responses.find {r -> r.question.text == 'what where'}
-
-
+		//ensure that the evaluation isn't saved to the database
+		assertEquals 0,Evaluation.list().size()
     }
+	
+
 }

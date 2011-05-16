@@ -28,15 +28,17 @@ class EvaluationController {
 		
 		if(eval.validate()){
 			def p = params
-			eval.save(failOnError:true)
-			redirect(controller:"review",action:"list")
+			eval.save(flush:true)
+			redirect(controller:"teamMember",action:"index")
 		}
 		else{
+
 			def viewModel = new EvaluationViewModel(evaluationInstance: eval)
 			viewModel.answers = Answer.findAll()
+			
 			render(view:"create",model:[evaluationViewModel:viewModel])
 		}
-		
+
 		
 	}
 }

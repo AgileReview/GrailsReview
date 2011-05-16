@@ -40,4 +40,29 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 
 		assertEquals 'login',controller.redirectArgs.action
 	}
+	
+	void test_index_returns_a_list_of_reviews_to_complete(){
+		def reviews = [new Review(),new Review()]
+		def teamMember = new TeamMember()
+		def rctrl = mockFor(ReviewService)
+		def tParam
+		rctrl.demand.reviewsLeftToComplete(){t -> tParam=t;reviews}
+		def controller = new TeamMemberController()
+		controller.teamMemberService = mock_current_user(teamMember)
+		controller.reviewService = rctrl.createMock()
+		
+		def viewModel = controller.index()['teamMemberViewModel']
+		assertSame reviews,viewModel.reviewsToComplete
+		assertSame teamMember,viewModel.teamMember
+		assertSame tParam,teamMember
+	}
+	
+	void test_index_redirects_to_login_for_invalid_user(){
+		throw new Exception('not implemented')
+	}
+	def mock_current_user(def user){
+		def teamMemberServiceController = mockFor(TeamMemberService)
+		teamMemberServiceController.demand.getCurrentTeamMember(){user}
+		teamMemberServiceController.createMock()
+	}
 }

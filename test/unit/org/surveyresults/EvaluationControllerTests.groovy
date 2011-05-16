@@ -55,8 +55,8 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		assertNotNull resp
 		assertEquals resp.answer.id,1
 		assertEquals eval.responder.name,'foo'
-		assertEquals "review",controller.redirectArgs.controller
-		assertEquals "list",controller.redirectArgs.action
+		assertEquals "teamMember",controller.redirectArgs.controller
+		assertEquals "index",controller.redirectArgs.action
 		
 	}
 

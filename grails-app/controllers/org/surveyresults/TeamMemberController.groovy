@@ -1,8 +1,15 @@
 package org.surveyresults
 
 class TeamMemberController {
+	
+	TeamMemberService teamMemberService
+	ReviewService reviewService
 
-    def index = { }
+    def index = { 
+		def currentUser = teamMemberService.getCurrentTeamMember(session)
+		def viewModel = new TeamMemberViewModel(reviewsToComplete:reviewService.reviewsLeftToComplete(currentUser),teamMember:currentUser)
+		['teamMemberViewModel':viewModel]
+	}
 	
 	def login = {}
 	

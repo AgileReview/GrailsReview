@@ -6,19 +6,18 @@ import org.hibernate.cache.ReadWriteCache.Item;
 
 class Evaluation {
 
-	
+	String comments
 	TeamMember responder
 	static hasMany =[responses:Response]
 	static belongsTo=[review:Review]
-	Comment comment
+	
+	
 	static constraints = {
-		comment(nullable:true)
+		comments(nullable:true)
 		responses(validator: {
 			if (it.findAll{resp -> resp.answer == null}.size() > 0) 
 				return ['incomplete.evaluation']
 		})
-
-
 	}
 	
 	List responses = ListUtils.lazyList([],{new Response()} as Factory)

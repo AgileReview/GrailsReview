@@ -24,8 +24,9 @@ class EvaluationTests extends GrailsUnitTestCase {
 		mockDomain(Evaluation,[])
 		def eval = new Evaluation(responder:new TeamMember(),review:new Review())
 		eval.addToResponses(new Response(question:new Question(),answer:new Answer()))
-
-		assertNull eval.validate()
+	
+		assertTrue eval.validate()
+		
 		
 		
 	}

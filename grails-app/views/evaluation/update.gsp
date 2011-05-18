@@ -15,18 +15,19 @@
     </g:hasErrors>
     <div>Please complete review for ${evaluationViewModel.evaluationInstance.review.reviewee.name}</div>
     <g:form action="save" >
-    <g:hiddenField name="review.id" value="${evaluationViewModel.evaluationInstance.review.id}"></g:hiddenField>
+
+    <g:hiddenField name="id" value="${evaluationViewModel.evaluationInstance.id}"></g:hiddenField>
     <div class="dialog">
     	<table>
     	
     	<g:each var="resp" status="i" in="${evaluationViewModel.evaluationInstance.responses.sort{it.question.id}}">
-    		<g:hiddenField name="responses[${i}].question.id" value="${resp.question.id}"></g:hiddenField>
+    		
     		
     		<tr><td>${resp.question.id }</td><td>${resp.question.text}</td>
     		<td>
     		
     		<g:each var="answer" in="${evaluationViewModel.answers}">
-    		<g:radio name="response[${i}].answer.id" value="${answer.id}"/>${answer.value}
+    		<g:radio name="responses[${i}].answer.id" value="${answer.id}"/>${answer.value}
     		</g:each>
     		</td>
     		</tr>

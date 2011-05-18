@@ -15,10 +15,10 @@ class Evaluation {
 	
 	static constraints = {
 		comments(nullable:true)
-//		responses(validator: {
-//			if (it.findAll{resp -> resp.answer == null}.size() > 0) 
-//				return ['incomplete.evaluation']
-//		})
+		responses(validator: {val, obj ->
+			if ((val.findAll{resp -> resp.answer == null}.size() > 0) && obj.complete) 
+				return ['incomplete.evaluation']
+		})
 	}
 	
 	List responses = ListUtils.lazyList([],{new Response()} as Factory)

@@ -23,16 +23,18 @@ class EvaluationController {
 			redirect(action:'login',controller:'teamMember')
 			return
 		}
-		def eval = new Evaluation(params)
+		println params
+		def eval = Evaluation.get(params.id)
+		params.complete = true
+		eval.properties = params
 		eval.responder = currentUser
 		
 		if(eval.validate()){
 			def p = params
-			eval.save(flush:true)
+			eval.save(failOnError:true)
 			redirect(controller:"teamMember",action:"index")
 		}
 		else{
-
 			def viewModel = new EvaluationViewModel(evaluationInstance: eval)
 			viewModel.answers = Answer.findAll()
 			

@@ -31,38 +31,52 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 	
 	}
 	
-	void test_saving_an_evaluation_deep_saves_and_redirects_to_review_controller(){
+	void test_saving_an_evaluation_deep_saves_completes_and_redirects_to_review_controller(){
 		def teamMember = new TeamMember(id:1,name:'foo')
 		mockDomain(Question,[new Question(id:1,text:'foo'),new Question(id:2,text:'bar')])
-		mockDomain(Review,[new Review(id:1)])
+		mockDomain(Answer,[new Answer(id:2,text:'foo',value:1)])
+		mockDomain(Review,[])
 		mockDomain(Evaluation,[])
 		mockDomain(Response,[])
 		mockDomain(TeamMember,[teamMember])
-		mockDomain(Answer,[new Answer(id:1,text:'foo',value:1)])
+		def review = new Review(id:1,quarter:'x',reviewee:new TeamMember())
+		def evaluation = new Evaluation(responder:new TeamMember())
+		def res =  new Response(question: Question.get(1))
+		
+		review.addToEvaluations(evaluation)
+		review.save(flush:true)
+		
+		evaluation.review = review
+		
+		evaluation.save(failOnError:true)
+		evaluation.addToResponses(res)
+		evaluation.save(flush:true)
+		res.save(flush:true)
+
 		def controller = new EvaluationController()
-		controller.params['review.id'] = 1
-		controller.params['responses[0].question.id'] = "1"
-		controller.params['responses[0].answer.id'] = "1"
-		controller.params['responses[1].question.id'] = "2"
-		controller.params['responses[1].answer.id'] = "1"
+		controller.params['id'] = evaluation.id
+		controller.params['responses[0].answer.id'] = "2"
+		controller.params['complete'] = 'true'
 		
 		controller.teamMemberService = mock_current_user(teamMember)
 		controller.save()
-		
-		def eval =  Evaluation.get(1)
-		assertEquals eval.responses.size(),2
-		def resp =  eval.responses.find {r -> r.question.id==2 }
-		assertNotNull resp
-		assertEquals resp.answer.id,1
-		assertEquals eval.responder.name,'foo'
+		//assuming things went well we should be directed back to the teamMember controller
 		assertEquals "teamMember",controller.redirectArgs.controller
 		assertEquals "index",controller.redirectArgs.action
 		
+		def eval =  Evaluation.get(1)
+
+		assertEquals eval.responses.size(),1
+		assertNotNull eval.responses.find {r -> r.answer.id==2 }
+		assertTrue eval.complete
+
 	}
 
 	void test_saving_an_invalid_evalution_redirects_to_update(){
 		mockDomain(Answer,[])
 		def mock = new MockFor(Evaluation)
+		mock.demand.get{ new Evaluation()}
+		mock.demand.setProperties{}
 		mock.demand.setResponder{}
 		mock.demand.validate{ false}
 		

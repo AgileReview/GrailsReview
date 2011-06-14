@@ -13,7 +13,7 @@
 .settings
 /*.launch
 /*.tmproj
-
+/target
 # logs
 stacktrace.log
 /test/reports

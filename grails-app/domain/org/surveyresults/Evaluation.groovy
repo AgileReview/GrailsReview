@@ -2,7 +2,6 @@ package org.surveyresults
 
 import org.apache.commons.collections.Factory
 import org.apache.commons.collections.ListUtils
-import org.hibernate.cache.ReadWriteCache.Item;
 
 class Evaluation {
 

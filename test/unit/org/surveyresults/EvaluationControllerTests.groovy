@@ -2,7 +2,6 @@ package org.surveyresults
 
 import grails.test.*
 import groovy.mock.interceptor.MockFor
-import groovy.mock.interceptor.StubFor
 
 
 class EvaluationControllerTests extends ControllerUnitTestCase {
@@ -16,19 +15,23 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 	
 	void test_creating_when_user_is_not_logged_in_redirects_to_login_page(){
 		def controller = new EvaluationController()
-		controller.teamMemberService = mock_current_user(null)
+		def tmCtrl = mock_current_user(null)
+		controller.teamMemberService = tmCtrl.createMock()
 		controller.update()
 		assertEquals controller.redirectArgs.action,'login'
 		assertEquals controller.redirectArgs.controller,'teamMember'
+		tmCtrl.verify()
 	}
 	
 	void test_saving_when_user_is_not_logged_in_redirects_to_login_page(){
 		
 		def controller = new EvaluationController()
-		controller.teamMemberService = mock_current_user(null)
+		def tmCtrl = mock_current_user(null)
+		controller.teamMemberService = tmCtrl.createMock()
 		controller.save()
 		assertEquals controller.redirectArgs.action,'login'
 		assertEquals controller.redirectArgs.controller,'teamMember'
+		tmCtrl.verify()
 	
 	}
 	
@@ -53,13 +56,16 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		evaluation.addToResponses(res)
 		evaluation.save(flush:true)
 		res.save(flush:true)
-
+		def rsCtrl = mockFor(ReviewService)
+		rsCtrl.demand.evalCompleted(){}
+		def tmCtrl = mock_current_user(teamMember)
 		def controller = new EvaluationController()
+		
 		controller.params['id'] = evaluation.id
 		controller.params['responses[0].answer.id'] = "2"
 		controller.params['complete'] = 'true'
-		
-		controller.teamMemberService = mock_current_user(teamMember)
+		controller.reviewService = rsCtrl.createMock()
+		controller.teamMemberService = tmCtrl.createMock()
 		controller.save()
 		//assuming things went well we should be directed back to the teamMember controller
 		assertEquals "teamMember",controller.redirectArgs.controller
@@ -70,6 +76,8 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		assertEquals eval.responses.size(),1
 		assertNotNull eval.responses.find {r -> r.answer.id==2 }
 		assertTrue eval.complete
+		rsCtrl.verify()
+		tmCtrl.verify()
 
 	}
 
@@ -80,13 +88,14 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		mock.demand.setProperties{}
 		mock.demand.setResponder{}
 		mock.demand.validate{ false}
-		
+		def tmCtrl = mock_current_user(new TeamMember(id:1,name:'foo'))
 		def controller = new EvaluationController()
-		controller.teamMemberService = mock_current_user(new TeamMember(id:1,name:'foo'))
+		controller.teamMemberService = tmCtrl.createMock()
 		mock.use{
 			controller.save()
 		}
 		assertEquals "update",controller.renderArgs.view
+		tmCtrl.verify()
 		
 	}
 
@@ -106,12 +115,12 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		mockDomain(Evaluation,[evaluation])
 		
 
-		def user = new TeamMember(name:'Patrick Escarcega')
+		def tmCtrl = mock_current_user( new TeamMember(name:'Patrick Escarcega'))
 
 		def controller = new EvaluationController()
 		controller.params.evaluationID = evaluationID
 
-		controller.teamMemberService = mock_current_user(user )
+		controller.teamMemberService = tmCtrl.createMock()
 		def response = controller.update()['evaluationViewModel']
 		//make sure response is the view model we're after (do we need a view model yet?)
 		assertNotNull response
@@ -120,13 +129,16 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 
 		assertEquals response.answers.size(), 3
 		assertEquals response.answers[2].text, 'ugly'
+		tmCtrl.verify()
 		
 	}
+	
+
 	
 	def mock_current_user(def user){
 		def teamMemberServiceController = mockFor(TeamMemberService)
 		teamMemberServiceController.demand.getCurrentTeamMember(){user}
-		teamMemberServiceController.createMock()
+		teamMemberServiceController
 	}
 	
 }

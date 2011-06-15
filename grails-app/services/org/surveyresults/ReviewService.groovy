@@ -13,6 +13,14 @@ class ReviewService {
 		evals
     }
 	
+	def evalCompleted(def review){
+		def incomplete = review.evaluations.find { e-> e.complete == false}
+		if(incomplete ==null){
+			review.complete = true
+			review.save()
+		}
+	}
+	
 	def reviewsCompleted(def teamMember){
 		def reviewsCompleted = Review.withCriteria(){
 			evaluations{

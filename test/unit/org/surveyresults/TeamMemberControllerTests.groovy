@@ -41,20 +41,28 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 		assertEquals 'login',controller.redirectArgs.action
 	}
 	
-	void test_index_returns_a_list_of_evaluations_to_complete(){
+	void test_index_returns_a_list_of_evaluations_to_complete_and_completed_reviews(){
 		def evaluations = [new Evaluation(),new Evaluation()]
-		def teamMember = new TeamMember()
+		def currentUser = new TeamMember()
+		def otherUser = new TeamMember()
+		def completeReview = new Review(reviewee:currentUser,complete:true)
+		def incompleteReview = new Review(reviewee:currentUser,complete:false)
+		def notYourReview = new Review(reviewee:otherUser,complete:false)
+		mockDomain(Review,[completeReview,incompleteReview,notYourReview])
 		def rctrl = mockFor(ReviewService)
 		def tParam
 		rctrl.demand.evaluationsLeftToComplete(){t -> tParam=t;evaluations}
 		def controller = new TeamMemberController()
-		controller.teamMemberService = mock_current_user(teamMember)
+		controller.teamMemberService = mock_current_user(currentUser)
 		controller.reviewService = rctrl.createMock()
 		
 		def viewModel = controller.index()['teamMemberViewModel']
 		assertSame evaluations,viewModel.evaluationsToComplete
-		assertSame teamMember,viewModel.teamMember
-		assertSame tParam,teamMember
+		assertSame currentUser,viewModel.teamMember
+		assertSame tParam,currentUser
+		assertEquals viewModel.resultsToView.size(),1
+		assertSame completeReview,viewModel.resultsToView[0]
+		rctrl.verify()
 	}
 	
 	void test_index_redirects_to_login_for_invalid_user(){

@@ -57,7 +57,7 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		evaluation.save(flush:true)
 		res.save(flush:true)
 		def rsCtrl = mockFor(ReviewService)
-		rsCtrl.demand.evalCompleted(){}
+		rsCtrl.demand.evaluationCompleted(){}
 		def tmCtrl = mock_current_user(teamMember)
 		def controller = new EvaluationController()
 		

@@ -32,7 +32,7 @@ class EvaluationController {
 		
 		if(eval.validate()){
 			eval.save(failOnError:true)
-			reviewService.evalCompleted(eval.review)
+			reviewService.evaluationCompleted(eval.review)
 			redirect(controller:"teamMember",action:"index")
 		}
 		else{

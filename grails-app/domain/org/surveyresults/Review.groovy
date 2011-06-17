@@ -4,8 +4,9 @@ class Review {
 
 	
 	TeamMember reviewee
+	static belongsTo = [teamReview:TeamReview]
 	static hasMany =[evaluations:Evaluation]
-	String quarter
+	
 	boolean complete  = false
 		
     static constraints = {

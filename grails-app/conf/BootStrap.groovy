@@ -37,11 +37,15 @@ class BootStrap {
 			new Answer(text:'Agree',value:4).save(failOnError:true)
 			new Answer(text:'Strongly Agree',value:5).save(failOnError:true)
 		}
+		if(!TeamReview.count()){
+			def teamReview = new TeamReview(name:'testReview')
+			teamReview.save(failOnError:true)
+		}
 		if(!Review.count()){
 			
 			def rs = new ReviewService()
 			rs.evaluationService = new EvaluationService()
-			TeamMember.list().each { t-> rs.createBlankReview(t,'z').save(failOnError:true)}
+			TeamMember.list().each { t-> rs.createBlankReview(t,TeamReview.findByName('testReview')).save(failOnError:true)}
 		}
 
 

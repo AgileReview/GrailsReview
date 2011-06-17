@@ -46,12 +46,12 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 		def currentUser = new TeamMember()
 		def otherUser = new TeamMember()
 		def completeReview = new Review(reviewee:currentUser,complete:true)
-		def incompleteReview = new Review(reviewee:currentUser,complete:false)
-		def notYourReview = new Review(reviewee:otherUser,complete:false)
-		mockDomain(Review,[completeReview,incompleteReview,notYourReview])
+		
 		def rctrl = mockFor(ReviewService)
 		def tParam
+		def tParam2
 		rctrl.demand.evaluationsLeftToComplete(){t -> tParam=t;evaluations}
+		rctrl.demand.completeReviewsForTeamMember(){t->tParam2=t;[completeReview]}
 		def controller = new TeamMemberController()
 		controller.teamMemberService = mock_current_user(currentUser)
 		controller.reviewService = rctrl.createMock()
@@ -60,7 +60,7 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 		assertSame evaluations,viewModel.evaluationsToComplete
 		assertSame currentUser,viewModel.teamMember
 		assertSame tParam,currentUser
-		assertEquals viewModel.resultsToView.size(),1
+		assertSame tParam2,currentUser
 		assertSame completeReview,viewModel.resultsToView[0]
 		rctrl.verify()
 	}

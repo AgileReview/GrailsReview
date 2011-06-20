@@ -22,13 +22,13 @@ class BootStrap {
 		if(!Question.count()){
 			new Question(text:'Works well with a team').save(failOnError:true)
 			new Question(text:'Stays at the top of their profession').save(failOnError:true)
-			new Question(text:'Works with and for users').save(failOnError:true)
-			new Question(text:'Is able to self manage').save(failOnError:true)
-			new Question(text:'Stays test driven').save(failOnError:true)
-			new Question(text:'Is a great architect').save(failOnError:true)
-			new Question(text:'Manages work well').save(failOnError:true)
-			new Question(text:'Writes great code').save(failOnError:true)
-			new Question(text:'Writes great tests').save(failOnError:true)
+//			new Question(text:'Works with and for users').save(failOnError:true)
+//			new Question(text:'Is able to self manage').save(failOnError:true)
+//			new Question(text:'Stays test driven').save(failOnError:true)
+//			new Question(text:'Is a great architect').save(failOnError:true)
+//			new Question(text:'Manages work well').save(failOnError:true)
+//			new Question(text:'Writes great code').save(failOnError:true)
+//			new Question(text:'Writes great tests').save(failOnError:true)
 		}
 		if(!Answer.count()){
 			new Answer(text:'Strongly Disagree',value:1).save(failOnError:true)
@@ -38,15 +38,14 @@ class BootStrap {
 			new Answer(text:'Strongly Agree',value:5).save(failOnError:true)
 		}
 		if(!TeamReview.count()){
-			def teamReview = new TeamReview(name:'testReview')
-			teamReview.save(failOnError:true)
-		}
-		if(!Review.count()){
-			
+			def incompleteReview = new TeamReview(name:'inCompleteReview')
+			incompleteReview.save(failOnError:true)
 			def rs = new ReviewService()
 			rs.evaluationService = new EvaluationService()
-			TeamMember.list().each { t-> rs.createBlankReview(t,TeamReview.findByName('testReview')).save(failOnError:true)}
+			TeamMember.list().each { t-> rs.createBlankReview(t,incompleteReview).save(failOnError:true)}
+			
 		}
+
 
 
     }

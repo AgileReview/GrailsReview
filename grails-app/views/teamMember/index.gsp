@@ -1,4 +1,4 @@
-<%@ page import="org.surveyresults.TeamMember" %>
+<%@ page import="org.surveyresults.*" %>
 
 <html>
     <head>
@@ -19,7 +19,7 @@
     
     <div>
     <g:each var="review" in="${teamMemberViewModel.resultsToView}">
-    <span><g:link controller="review" action="show" params="[id:review.id]">${review.quarter}</g:link></span><br>
+    <span><g:link controller="teamReview" action="results" params="[id:review.teamReview.id]">${review.teamReview.name}</g:link></span><br>
     </g:each>
     </div>
     </body>

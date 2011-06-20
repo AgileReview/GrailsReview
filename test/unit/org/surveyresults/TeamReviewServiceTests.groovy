@@ -45,6 +45,7 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		def tm = new TeamMember(id:1)
 		
 		def tr = new TeamReview()
+		tr.averageScores = [3l:8,4l:10]
 		def rev = new Review(reviewee:tm)
 		tr.addToReviews(rev)
 		rev.averageScores = [3l:2,4l:3]
@@ -59,5 +60,6 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		assertEquals 2,res[0].yourScore
 		assertEquals 1,res[0].minAnswer
 		assertEquals 5,res[0].maxAnswer
+		assertEquals 8,res[0].teamAverage
 	}
 }

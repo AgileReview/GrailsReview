@@ -43,12 +43,30 @@ class BootStrap {
 			def rs = new ReviewService()
 			rs.evaluationService = new EvaluationService()
 			TeamMember.list().each { t-> rs.createBlankReview(t,incompleteReview).save(failOnError:true)}
-			
+			println 'creating a dummy completed team review'
+			def completeReview = new TeamReview(name:'completeReview')
+			completeReview.save(failOnError:true)
+			rs.evaluationService = new EvaluationService()
+			TeamMember.list().each { t-> rs.createBlankReview(t,completeReview).save(failOnError:true)}
+			//answer all the questions
+			completeReview.reviews.each { review->review.evaluations.each { eval->completeEvaluation(eval)}}
+
 		}
 
 
 
     }
+	def completeEvaluation(eval) {
+		def rs = new ReviewService()
+		rs.teamReviewService = new TeamReviewService()
+		eval.responses.each {
+			resp->resp.answer=Answer.findByText('Agree')
+			resp.save(failOnError:true)
+		}
+		eval.complete = true
+		eval.save(failOnError:true)
+		rs.evaluationCompleted eval.review
+	}
     def destroy = {
     }
 }

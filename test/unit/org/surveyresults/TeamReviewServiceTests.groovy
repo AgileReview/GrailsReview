@@ -48,6 +48,8 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		def rev = new Review(reviewee:tm)
 		tr.addToReviews(rev)
 		rev.averageScores = [3l:2,4l:3]
+		rev.minimumScores = [3l:1,4l:2]
+		rev.maximumScores = [3l:5,4l:10]
 		
 		def trs = new TeamReviewService()
 		def res = trs.resultsForTeamMember(tr,tm)
@@ -55,5 +57,7 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		res.each {r->assertEquals org.surveyresults.ReviewResult,r.class}
 		assertEquals 3l,res[0].question.id
 		assertEquals 2,res[0].yourScore
+		assertEquals 1,res[0].minAnswer
+		assertEquals 5,res[0].maxAnswer
 	}
 }

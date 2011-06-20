@@ -14,7 +14,9 @@ class TeamReviewService {
 	
 	def resultsForTeamMember(def teamReview,def teamMember){
 		def reviewForUser = teamReview.reviews.find { r->r.reviewee.id == teamMember.id}
-		reviewForUser.averageScores.collect { ques,av-> new ReviewResult(question:Question.get(ques),yourScore:av)}
-		//return [new ReviewResult()]
+		def results = reviewForUser.averageScores.collect { ques,av-> new ReviewResult(question:Question.get(ques),yourScore:av)}
+		reviewForUser.maximumScores.each{qid,max-> results.find {res->res.question.id ==qid }.maxAnswer=max}
+		reviewForUser.minimumScores.each{qid,min-> results.find {res->res.question.id ==qid }.minAnswer=min}
+		results
 	}
 }

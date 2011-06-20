@@ -11,8 +11,8 @@ class TeamReview {
 	def getAverageScores(){
 		if(!averageScores){
 			def res = [:]
-			reviews.each {r->r.averageScores.each {question,score->res[question] = 0 }}
-			reviews.each {r->r.averageScores.each {question,score->res[question]+=score }}
+			//reviews.each {r->r.averageScores.each {question,score->res[question] = 0 }}
+			reviews.each {r->r.averageScores.each {question,score->res.get(question,0);res[question]+=score }}
 			res.each { question,total->res[question] = res[question]/reviews.size()}
 			averageScores = res
 		}

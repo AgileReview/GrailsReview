@@ -11,4 +11,10 @@ class TeamReviewService {
 			teamReview.save()
 		}
 	}
+	
+	def resultsForTeamMember(def teamReview,def teamMember){
+		def reviewForUser = teamReview.reviews.find { r->r.reviewee == teamMember}
+		reviewForUser.averageScores.collect { ques,av-> new ReviewResult(question:Question.get(ques),yourScore:av)}
+		//return [new ReviewResult()]
+	}
 }

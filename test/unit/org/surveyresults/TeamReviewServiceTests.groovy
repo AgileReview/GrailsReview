@@ -36,54 +36,24 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		assertFalse tr.complete
 		assertFalse saved
 	}
-	
-	void getExampleTeamReview(){
+		
+	void test_example_team_review_has_results_calculated_correctly(){
+		
 		mockDomain(TeamReview,[])
 		mockDomain(Review,[])
-		mockDomain(Evaluation,[])
-		def review = new Review(complete:true)
-		def teamReview = new TeamReview(complete:true)
-		teamReview.addToReviews(review)
-		def p1 = new TeamMember(role:new Role(name:'qa'),name:'p1')
-		def p2 = new TeamMember(role:new Role(name:'qa'),name:'p2')
-		def p3 = new TeamMember(role:new Role(name:'dev'),name:'p3')
+		mockDomain(Question,[new Question(id:3l),new Question(id:4l)])
+		def tm = new TeamMember(id:1)
 		
+		def tr = new TeamReview()
+		def rev = new Review(reviewee:tm)
+		tr.addToReviews(rev)
+		rev.averageScores = [3l:2,4l:3]
 		
-		def q1 = new Question(text:'q1')
-		def q2 = new Question(text:'q2')
-		def a1 = new Answer(value:2)
-		def a2 = new Answer(value:3)
-		
-		def p1eval = new Evaluation(responder:p1)
-		p1eval.addToResponses(new Response(question:q1,answer:a1))//2
-		p1eval.addToResponses(new Response(question:q2,answer:a1))//2
-		
-		def p2eval = new Evaluation(responder:p2)
-		p2eval.addToResponses(new Response(question:q1,answer:a1))//2
-		p2eval.addToResponses(new Response(question:q2,answer:a2))//3
-
-		def p3eval = new Evaluation(responder:p3)
-		p3eval.addToResponses(new Response(question:q1,answer:a2))//3
-		p3eval.addToResponses(new Response(question:q2,answer:a2))//3
-		
-		review.addToEvaluations(p1eval)
-		review.addToEvaluations(p2eval)
-		review.addToEvaluations(p3eval)
-		teamReview
-		
-	}
-	
-	void test_example_team_review_has_results_calculated_correctly(){
-		rs = new TeamReviewService()
-		def rr = rs.calculateScoresForReviewee(getExampleTeamReview)
-		assertEquals 2,rr.size()
-		//get ReviewResult for q1
-		def q1 = rr.find {r -> r.question.text == 'q1'}
-		assertNotNull q1
-		assertEquals 2.33,q1.yourScore
-		//assertEquals 1,q1.teamAverage
-		//assertEquals 1,q1.roleAverage
-		//assertEquals 1,q1.minAnswer
-		//assertEquals 1,q1.maxAnswer
+		def trs = new TeamReviewService()
+		def res = trs.resultsForTeamMember(tr,tm)
+		assertEquals 2,res.size()
+		res.each {r->assertEquals org.surveyresults.ReviewResult,r.class}
+		assertEquals 3l,res[0].question.id
+		assertEquals 2,res[0].yourScore
 	}
 }

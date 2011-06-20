@@ -11,7 +11,7 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 
-    void test_doLogin_redirects_to_review_controller_when_login_successful() {
+    void test_doLogin_redirects_to_teamMember_controller_when_login_successful() {
 		mockDomain(TeamMember,[new TeamMember(email:'me',password:'you',name:'x',role:new Role())])
 		def session = [ : ]
 		TeamMemberController.metaClass.getSession = { -> session }
@@ -22,8 +22,8 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 		controller.doLogin()
 
 		assertEquals 'me',controller.session.teamMember.email
-		assertEquals 'review',controller.redirectArgs.controller
-		assertEquals 'list',controller.redirectArgs.action
+		assertEquals 'teamMember',controller.redirectArgs.controller
+		assertEquals 'index',controller.redirectArgs.action
     }
 	
 	void test_doLogin_redirects_to_login_controller_when_login_wrong() {
@@ -66,7 +66,11 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 	}
 	
 	void test_index_redirects_to_login_for_invalid_user(){
-		throw new Exception('not implemented')
+		def controller = new TeamMemberController()
+		controller.teamMemberService = mock_current_user(null)
+		controller.index()
+		assertEquals 'login',controller.redirectArgs.action
+		
 	}
 	def mock_current_user(def user){
 		def teamMemberServiceController = mockFor(TeamMemberService)

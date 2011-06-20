@@ -7,8 +7,10 @@ class TeamMemberController {
 
     def index = { 
 		def currentUser = teamMemberService.getCurrentTeamMember(session)
+		
 		if(!currentUser){
-			redirect(action:login)
+			redirect(action:'login')
+			return
 		}
 		def evaluationsToComplete = reviewService.evaluationsLeftToComplete(currentUser)
 		def resultsToView = reviewService.completeReviewsForTeamMember(currentUser)
@@ -22,7 +24,7 @@ class TeamMemberController {
 		def teamMember = TeamMember.findByEmailAndPassword(params.email,params.password)
 		if (teamMember){
 			session.teamMember = teamMember
-			redirect(action:'list',controller:'review')
+			redirect(action:'index',controller:'teamMember')
 		}
 		else{
 			session.teamMember = null

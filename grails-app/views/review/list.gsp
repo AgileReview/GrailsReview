@@ -25,6 +25,7 @@
                             <g:sortableColumn property="id" title="${message(code: 'review.id.label', default: 'Id')}" />
                         
                             <th><g:message code="review.reviewee.label" default="Person" /></th>
+                            <th><g:message code="review.complete.label" default="complete" /></th>
                         
                         </tr>
                     </thead>
@@ -35,6 +36,7 @@
                             <td><g:link controller="evaluation" action="create" params="[reviewID:reviewInstance.id]">${fieldValue(bean: reviewInstance, field: "id")}</g:link></td>
                         
                             <td>${fieldValue(bean: reviewInstance, field: "reviewee")}</td>
+                            <td>${fieldValue(bean: reviewInstance, field: "complete")}</td>
                         
                         </tr>
                     </g:each>

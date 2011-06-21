@@ -7,7 +7,14 @@ class TeamMemberController {
 
     def index = { 
 		def currentUser = teamMemberService.getCurrentTeamMember(session)
-		def viewModel = new TeamMemberViewModel(evaluationsToComplete:reviewService.evaluationsLeftToComplete(currentUser),teamMember:currentUser)
+		
+		if(!currentUser){
+			redirect(action:'login')
+			return
+		}
+		def evaluationsToComplete = reviewService.evaluationsLeftToComplete(currentUser)
+		def resultsToView = reviewService.completeReviewsForTeamMember(currentUser)
+		def viewModel = new TeamMemberViewModel(resultsToView:resultsToView,evaluationsToComplete:evaluationsToComplete,teamMember:currentUser)
 		['teamMemberViewModel':viewModel]
 	}
 	
@@ -17,7 +24,7 @@ class TeamMemberController {
 		def teamMember = TeamMember.findByEmailAndPassword(params.email,params.password)
 		if (teamMember){
 			session.teamMember = teamMember
-			redirect(action:'list',controller:'review')
+			redirect(action:'index',controller:'teamMember')
 		}
 		else{
 			session.teamMember = null

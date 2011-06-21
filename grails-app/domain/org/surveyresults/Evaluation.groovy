@@ -2,15 +2,27 @@ package org.surveyresults
 
 import org.apache.commons.collections.Factory
 import org.apache.commons.collections.ListUtils
-import org.hibernate.cache.ReadWriteCache.Item;
 
 class Evaluation {
 
 	String comments
 	TeamMember responder
+	def results = null
+	boolean resultsGathered = false
+	static transients = ['results']
 	boolean complete = false
 	static hasMany =[responses:Response]
 	static belongsTo=[review:Review]
+	
+	def getResults(){
+		if(!results){
+			def res = [:]
+			responses.each {r->res[r.question.id] = r.answer.value}
+			results = res
+		}
+		results
+	}
+	
 	
 	
 	static constraints = {

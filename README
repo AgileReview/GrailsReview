@@ -1,0 +1,1 @@
+GrailsReview is a grails based implementation of an agile team review site.  The concept is to review early and often, and to eschew hierarchy in favor of team based reviews.  Each team member reviews the other, and your review is based on the average scores of the team.

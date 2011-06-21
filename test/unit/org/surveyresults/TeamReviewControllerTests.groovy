@@ -18,6 +18,8 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
 		def tr =  new TeamReview(id:1)
 		mockDomain(TeamReview,[tr])
 		mockDomain(TeamMember,[currentUser])
+		def answers = [new Answer(),new Answer()]
+		mockDomain(Answer,answers)
 		def trParam
 		def tmParam
 		def revResult = []
@@ -28,7 +30,7 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
 		controller.teamReviewService = trCtrl.createMock()
 		controller.params.id = 1
 		def result = controller.results()
-		
+		assertEquals result['answers'],answers
 		assertSame result['reviewResults'],revResult
 		
 		trCtrl.verify()

@@ -9,7 +9,7 @@ class TeamReviewController {
 		def teamReview = TeamReview.get(params.id)
 		def currentUser = teamMemberService.getCurrentTeamMember(session)
 		currentUser = TeamMember.get(currentUser.id) //rehydrate
-		['reviewResults':teamReviewService.resultsForTeamMember(teamReview,currentUser)]
+		['reviewResults':teamReviewService.resultsForTeamMember(teamReview,currentUser),'answers':Answer.list()]
 		
 	}
 }

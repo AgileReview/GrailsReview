@@ -29,7 +29,7 @@ class EvaluationController {
 		eval.properties = params
 		
 		
-		if(evaluationService.complete(eval,currentUser)){
+		if(evaluationService.complete(eval)){
 			redirect(controller:"teamMember",action:"index")
 		}
 		else{

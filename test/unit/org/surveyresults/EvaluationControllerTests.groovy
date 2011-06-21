@@ -43,9 +43,8 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		mockDomain(Evaluation,[evaluation])
 
 		def evCtrl = mockFor(EvaluationService)
-		def tmParam
 		def evParam
-		evCtrl.demand.complete(){e,t->evParam=e;tmParam=t;true}
+		evCtrl.demand.complete(){e->evParam=e}
 		def tmCtrl = mock_current_user(teamMember)
 		def controller = new EvaluationController()
 		controller.params.id = 1
@@ -55,7 +54,6 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 		controller.save()
 		
 		assertSame evParam,evaluation
-		assertSame tmParam,teamMember
 		
 		//assuming things went well we should be directed back to the teamMember controller
 		assertEquals "teamMember",controller.redirectArgs.controller
@@ -73,7 +71,7 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 
 		def tmCtrl = mock_current_user(new TeamMember(id:1,name:'foo'))
 		def evCtrl = mockFor(EvaluationService)
-		evCtrl.demand.complete(){e,t->false}
+		evCtrl.demand.complete(){e->false}
 		def controller = new EvaluationController()
 		controller.teamMemberService = tmCtrl.createMock()
 		controller.evaluationService = evCtrl.createMock()

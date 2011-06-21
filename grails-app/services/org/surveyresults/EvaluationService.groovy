@@ -13,10 +13,9 @@ class EvaluationService {
 		return evaluation
 	}
 	
-	def complete(evaluation,responder){
+	def complete(evaluation){
 		if(evaluation.validate()){
 			evaluation.complete = true
-			evaluation.responder = responder
 			evaluation.save(failOnError:true)
 
 			reviewService.evaluationCompleted evaluation.review

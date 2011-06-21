@@ -14,13 +14,10 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 	
 	void test_complete_sets_user_sets_complete_saves_and_calls_review_service(){
 		def review = new Review()
-		def tm = new TeamMember()
-		def tmParam
 		def evCtrl = new MockFor(Evaluation)
 		
 		evCtrl.demand.validate{true}
 		evCtrl.demand.setComplete{b->null}
-		evCtrl.demand.setResponder{r->tmParam = r}
 		evCtrl.demand.save{true}
 		evCtrl.demand.getReview{review}
 		def rCtrl = mockFor(ReviewService)
@@ -30,22 +27,21 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 		def es = new EvaluationService()
 		es.reviewService = rCtrl.createMock()
 		evCtrl.use{
-			assertTrue es.complete(new Evaluation(),tm)
+			assertTrue es.complete(new Evaluation())
 		}
-		assertSame tmParam,tm
 		assertSame rParam,review
 		rCtrl.verify()
 	}
 	
 	void test_complete_when_eval_is_invalid_sets_returns_false(){
-		def tm = new TeamMember()
+
 		def evCtrl = new MockFor(Evaluation)
 		evCtrl.demand.validate{false}
 
 		def es = new EvaluationService()
 		boolean res
 		evCtrl.use{
-			res= es.complete(new Evaluation(),tm)
+			res= es.complete(new Evaluation())
 		}
 		assertFalse res
 	}

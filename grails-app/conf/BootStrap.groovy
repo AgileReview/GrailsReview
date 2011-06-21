@@ -56,7 +56,7 @@ class BootStrap {
 			resp->resp.answer=Answer.findByText('Agree')
 			resp.save(failOnError:true)
 		}
-		es.complete eval, eval.responder
+		es.complete eval
 	}
     def destroy = {
     }

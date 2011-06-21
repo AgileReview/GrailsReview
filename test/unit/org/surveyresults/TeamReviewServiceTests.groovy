@@ -42,10 +42,13 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		mockDomain(TeamReview,[])
 		mockDomain(Review,[])
 		mockDomain(Question,[new Question(id:3l),new Question(id:4l)])
-		def tm = new TeamMember(id:1)
+		def tm = new TeamMember(id:1,role:new Role(id:2))
 		
 		def tr = new TeamReview()
-		tr.averageScores = [3l:8,4l:10]
+		def avg = [:]
+		avg[-1] =  [3l:8,4l:10] //average scores for no role
+		avg[tm.role.id] = [3l:10,4l:20] //average scores for the teammembers role
+		tr.averageScores = avg
 		def rev = new Review(reviewee:tm)
 		tr.addToReviews(rev)
 		rev.averageScores = [3l:2,4l:3]
@@ -61,5 +64,6 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		assertEquals 1,res[0].minAnswer
 		assertEquals 5,res[0].maxAnswer
 		assertEquals 8,res[0].teamAverage
+		assertEquals 10,res[0].roleAverage
 	}
 }

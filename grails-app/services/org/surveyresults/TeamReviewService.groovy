@@ -18,6 +18,7 @@ class TeamReviewService {
 		reviewForUser.maximumScores.each{qid,max-> results.find {res->res.question.id ==qid }.maxAnswer=max}
 		reviewForUser.minimumScores.each{qid,min-> results.find {res->res.question.id ==qid }.minAnswer=min}
 		teamReview.averageScores.each{qid,avg-> results.find {res->res.question.id ==qid }.teamAverage=avg}
+		teamReview.getAverageScores(teamMember.role).each{qid,avg-> results.find {res->res.question.id ==qid }.roleAverage=avg}
 		results
 	}
 }

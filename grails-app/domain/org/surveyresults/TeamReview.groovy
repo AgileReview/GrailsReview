@@ -4,19 +4,20 @@ class TeamReview {
 	
 	static hasMany = [reviews:Review]
 	static transients = ['averageScores']
-	def averageScores = null
+	def averageScores = [:]
 	boolean complete = false
 	String name
 	
-	def getAverageScores(){
-		if(!averageScores){
+	def getAverageScores(role=null){
+		def roleid = role? role.id:-1
+		if(!averageScores[roleid]){
 			def res = [:]
-			//reviews.each {r->r.averageScores.each {question,score->res[question] = 0 }}
-			reviews.each {r->r.averageScores.each {question,score->res.get(question,0);res[question]+=score }}
-			res.each { question,total->res[question] = res[question]/reviews.size()}
-			averageScores = res
+			def rvs = role?reviews.findAll { r->r.reviewee.role.id==role.id}:reviews
+			rvs.each {r->r.averageScores.each {question,score->res.get(question,0);res[question]+=score }}
+			res.each { question,total->res[question] = res[question]/rvs.size()}
+			averageScores[roleid] = res
 		}
-		averageScores
+		averageScores[roleid]
 	}
 	
 	

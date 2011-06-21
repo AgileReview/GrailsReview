@@ -41,7 +41,7 @@ class Review {
 		def all = [:]
 		evaluations.each { e->e.results.each {q,a-> all.get(q,[]) <<a}}
 		all.each {q,a->res[q] = maxormin ? a.min():a.max() }
-		minimumScores = res
+		res
 	}
 	
 

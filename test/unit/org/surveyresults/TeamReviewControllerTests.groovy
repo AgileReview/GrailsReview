@@ -12,11 +12,12 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
     }
 
     void test_results_gathers_up_results_from_service() {
-		def currentUser = new TeamMember()
+		def currentUser = new TeamMember(id:1)
 		def tmCtrl = mockCurrentUser(currentUser)
 		def trCtrl = mockFor(TeamReviewService)
 		def tr =  new TeamReview(id:1)
 		mockDomain(TeamReview,[tr])
+		mockDomain(TeamMember,[currentUser])
 		def trParam
 		def tmParam
 		def revResult = []

@@ -1,6 +1,7 @@
 package org.surveyresults
 
 import grails.test.*
+import org.codehaus.groovy.grails.web.taglib.GroovyPageAttributes
 
 class EvaluationTests extends GrailsUnitTestCase {
     protected void setUp() {
@@ -10,6 +11,42 @@ class EvaluationTests extends GrailsUnitTestCase {
     protected void tearDown() {
         super.tearDown()
     }
+	
+	void test_params_can_deep_save(){
+		mockDomain(Question,[new Question(id:1,text:'foo'),new Question(id:2,text:'bar')])
+		mockDomain(Answer,[new Answer(id:2,text:'foo',value:1)])
+		mockDomain(Review,[])
+		mockDomain(Evaluation,[])
+		mockDomain(Response,[])
+		mockDomain(TeamMember,[new TeamMember()])
+		def review = new Review(id:1,quarter:'x',reviewee:new TeamMember())
+		def evaluation = new Evaluation(responder:new TeamMember())
+		def res =  new Response(question: Question.get(1))
+		
+		review.addToEvaluations(evaluation)
+		review.save(flush:true)
+		
+		evaluation.review = review
+		
+		evaluation.save(failOnError:true)
+		evaluation.addToResponses(res)
+		evaluation.save(flush:true)
+		res.save(flush:true)
+		
+		Map params = new GroovyPageAttributes()
+		params['id'] = evaluation.id
+		params['responses[0].answer.id'] = "2"
+		params['complete'] = 'true'
+		def eval = Evaluation.get(params.id)
+		eval.properties = params
+		eval.save(failOnError:true)
+		eval = null
+		eval =  Evaluation.get(1)
+		assertEquals eval.responses.size(),1
+		assertNotNull eval.responses.find {r -> r.answer.id==2 }
+		assertTrue eval.complete
+	}
+	
 
     void test_validating_a_complete_eval_with_blank_answers_fails() {
 		mockDomain(Evaluation,[])

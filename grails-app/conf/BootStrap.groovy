@@ -49,15 +49,14 @@ class BootStrap {
 
     }
 	def completeEvaluation(eval) {
-		def rs = new ReviewService()
-		rs.teamReviewService = new TeamReviewService()
+		def es = new EvaluationService()
+		es.reviewService =  new ReviewService()
+		es.reviewService.teamReviewService = new TeamReviewService()
 		eval.responses.each {
 			resp->resp.answer=Answer.findByText('Agree')
 			resp.save(failOnError:true)
 		}
-		eval.complete = true
-		eval.save(failOnError:true)
-		rs.evaluationCompleted eval.review
+		es.complete eval, eval.responder
 	}
     def destroy = {
     }

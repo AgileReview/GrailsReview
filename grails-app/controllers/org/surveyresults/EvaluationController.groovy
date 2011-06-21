@@ -4,7 +4,6 @@ class EvaluationController {
 
 	EvaluationService evaluationService
 	TeamMemberService teamMemberService
-	ReviewService reviewService
 	def update = {
 		def currentUser = teamMemberService.getCurrentTeamMember(session)
 		if(currentUser == null){
@@ -26,13 +25,11 @@ class EvaluationController {
 		}
 		
 		def eval = Evaluation.get(params.id)
-		params.complete = true
-		eval.properties = params
-		eval.responder = currentUser
 		
-		if(eval.validate()){
-			eval.save(failOnError:true)
-			reviewService.evaluationCompleted(eval.review)
+		eval.properties = params
+		
+		
+		if(evaluationService.complete(eval,currentUser)){
 			redirect(controller:"teamMember",action:"index")
 		}
 		else{

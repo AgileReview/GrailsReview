@@ -35,67 +35,54 @@ class EvaluationControllerTests extends ControllerUnitTestCase {
 	
 	}
 	
-	void test_saving_an_evaluation_deep_saves_completes_and_redirects_to_review_controller(){
+	void test_saving_an_evaluation_calls_service_and_redirects_to_review_controller(){
 		def teamMember = new TeamMember(id:1,name:'foo')
-		mockDomain(Question,[new Question(id:1,text:'foo'),new Question(id:2,text:'bar')])
-		mockDomain(Answer,[new Answer(id:2,text:'foo',value:1)])
-		mockDomain(Review,[])
-		mockDomain(Evaluation,[])
-		mockDomain(Response,[])
 		mockDomain(TeamMember,[teamMember])
-		def review = new Review(id:1,quarter:'x',reviewee:new TeamMember())
-		def evaluation = new Evaluation(responder:new TeamMember())
-		def res =  new Response(question: Question.get(1))
-		
-		review.addToEvaluations(evaluation)
-		review.save(flush:true)
-		
-		evaluation.review = review
-		
-		evaluation.save(failOnError:true)
-		evaluation.addToResponses(res)
-		evaluation.save(flush:true)
-		res.save(flush:true)
-		def rsCtrl = mockFor(ReviewService)
-		rsCtrl.demand.evaluationCompleted(){}
+
+		def evaluation = new Evaluation(responder:new TeamMember(),id:1)
+		mockDomain(Evaluation,[evaluation])
+
+		def evCtrl = mockFor(EvaluationService)
+		def tmParam
+		def evParam
+		evCtrl.demand.complete(){e,t->evParam=e;tmParam=t;true}
 		def tmCtrl = mock_current_user(teamMember)
 		def controller = new EvaluationController()
-		
-		controller.params['id'] = evaluation.id
-		controller.params['responses[0].answer.id'] = "2"
-		controller.params['complete'] = 'true'
-		controller.reviewService = rsCtrl.createMock()
+		controller.params.id = 1
+
+		controller.evaluationService = evCtrl.createMock()
 		controller.teamMemberService = tmCtrl.createMock()
 		controller.save()
+		
+		assertSame evParam,evaluation
+		assertSame tmParam,teamMember
+		
 		//assuming things went well we should be directed back to the teamMember controller
 		assertEquals "teamMember",controller.redirectArgs.controller
 		assertEquals "index",controller.redirectArgs.action
-		
-		def eval =  Evaluation.get(1)
 
-		assertEquals eval.responses.size(),1
-		assertNotNull eval.responses.find {r -> r.answer.id==2 }
-		assertTrue eval.complete
-		rsCtrl.verify()
+		evCtrl.verify()
 		tmCtrl.verify()
 
 	}
 
 	void test_saving_an_invalid_evalution_redirects_to_update(){
 		mockDomain(Answer,[])
-		def mock = new MockFor(Evaluation)
-		mock.demand.get{ new Evaluation()}
-		mock.demand.setProperties{}
-		mock.demand.setResponder{}
-		mock.demand.validate{ false}
+		def evaluation = new Evaluation(id:1)
+		mockDomain(Evaluation,[evaluation])
+
 		def tmCtrl = mock_current_user(new TeamMember(id:1,name:'foo'))
+		def evCtrl = mockFor(EvaluationService)
+		evCtrl.demand.complete(){e,t->false}
 		def controller = new EvaluationController()
 		controller.teamMemberService = tmCtrl.createMock()
-		mock.use{
-			controller.save()
-		}
+		controller.evaluationService = evCtrl.createMock()
+		controller.params.id = 1
+		controller.save()
+
 		assertEquals "update",controller.renderArgs.view
 		tmCtrl.verify()
+		evCtrl.verify()
 		
 	}
 

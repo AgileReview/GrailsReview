@@ -39,7 +39,7 @@
     	<span></span><g:textArea name="comments"></g:textArea></span>
     	
     </div>
-    <g:submitButton name="complete"></g:submitButton>
+    <g:submitButton name="complete evaluation"></g:submitButton>
     </g:form>
     </body>
 </html>

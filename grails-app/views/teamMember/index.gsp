@@ -8,7 +8,7 @@
     </head>
     <body>
     <g:if test="${flash.message}">
-    <div class="message">${flash.message}</div>
+    	<div class="message">${flash.message}</div>
     </g:if>
 	<div>Welcome ${teamMemberViewModel.teamMember.name}!</div>
     <div>Please complete reviews for the following team members:</div>

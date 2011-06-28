@@ -42,6 +42,7 @@ class TeamMemberController {
 		}
 		else{
 			session.teamMember = null
+			flash.message = 'Incorrect user name or password.'
 			redirect(action:'login')
 		}
     }

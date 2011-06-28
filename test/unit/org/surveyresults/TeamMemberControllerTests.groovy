@@ -67,6 +67,7 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 		assertNull controller.session.teamMember
 
 		assertEquals 'login',controller.redirectArgs.action
+		assertEquals 'Incorrect user name or password.',controller.flash.message
 	}
 	
 	void test_index_returns_a_list_of_evaluations_to_complete_and_completed_reviews(){

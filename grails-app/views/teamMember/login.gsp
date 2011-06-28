@@ -7,6 +7,9 @@
 <title>User Login</title>
 </head>
 <body>
+    <g:if test="${flash.message}">
+    	<div class="message">${flash.message}</div>
+    </g:if>
         <div class="body">
            <g:form action="doLogin" method="post">
                <div class="dialog">

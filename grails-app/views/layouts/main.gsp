@@ -13,7 +13,7 @@
         </div>
         <div id="grailsLogo">
         <span><g:link controller="teamMember">Agile Review</g:link> - early. often.  team based.</span>
-        <g:if test="${session.teamMember}">
+        <g:if  test="${session.teamMember}">
         	<span style="display: block; text-align: right"><g:link controller="teamMember" action="logout">logout</g:link></span></div>
        	</g:if>
         <g:layoutBody />

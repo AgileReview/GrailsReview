@@ -22,6 +22,22 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 		assertEquals 'login',controller.redirectArgs.action
 		
 	}
+	
+	void test_do_change_password_changes_pass_and_redirects_to_confirm_page(){
+		def session = [:]
+		def tm = new TeamMember(email:'me',password:'you',name:'x',role:new Role())
+		mockDomain(TeamMember,[tm])
+		
+		TeamMemberController.metaClass.getSession = { -> session }
+		session.teamMember = tm
+		
+		def controller = new TeamMemberController()
+		controller.params.newPassword = 'me'
+		controller.doChangePassword()
+		assertEquals 'index',controller.redirectArgs.action
+		assertEquals 'Your password has been changed.',controller.flash.message
+		assertEquals 'me',TeamMember.findByName('x').password
+	}
 
     void test_doLogin_redirects_to_teamMember_controller_when_login_successful() {
 		mockDomain(TeamMember,[new TeamMember(email:'me',password:'you',name:'x',role:new Role())])

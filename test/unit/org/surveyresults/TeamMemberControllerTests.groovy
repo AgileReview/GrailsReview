@@ -10,6 +10,18 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
     protected void tearDown() {
         super.tearDown()
     }
+	
+	void test_logout_clears_session_and_redirects_to_login(){
+		def session = [ : ]
+		TeamMemberController.metaClass.getSession = { -> session }
+		def controller = new TeamMemberController()
+
+		session.teamMember = 'x'
+		controller.logout()
+		assertNull session.teamMember
+		assertEquals 'login',controller.redirectArgs.action
+		
+	}
 
     void test_doLogin_redirects_to_teamMember_controller_when_login_successful() {
 		mockDomain(TeamMember,[new TeamMember(email:'me',password:'you',name:'x',role:new Role())])

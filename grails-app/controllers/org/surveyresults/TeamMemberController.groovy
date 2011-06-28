@@ -20,6 +20,11 @@ class TeamMemberController {
 	
 	def login = {}
 	
+	def logout = {
+		session.teamMember = null
+		redirect(action:'login')	
+	}
+	
 	def doLogin = {
 		def teamMember = TeamMember.findByEmailAndPassword(params.email,params.password)
 		if (teamMember){

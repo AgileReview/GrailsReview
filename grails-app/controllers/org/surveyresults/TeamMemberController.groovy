@@ -56,12 +56,24 @@ class TeamMemberController {
     }
 
     def create = {
+		if(!enforceManager()){ return }
+
         def teamMemberInstance = new TeamMember()
         teamMemberInstance.properties = params
         return [teamMemberInstance: teamMemberInstance]
     }
+	
+	def enforceManager(){
+		def tm = teamMemberService.getCurrentTeamMember(session)
+		if(tm?.role?.name !='Manager'){
+			response.sendError 401,'Only managers can do this'
+			return false
+		}
+		true
+	}
 
     def save = {
+		if(!enforceManager()){ return }
         def teamMemberInstance = new TeamMember(params)
         if (teamMemberInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'teamMember.label', default: 'TeamMember'), teamMemberInstance.id])}"
@@ -73,6 +85,7 @@ class TeamMemberController {
     }
 
     def show = {
+		if(!enforceManager()){ return }
         def teamMemberInstance = TeamMember.get(params.id)
         if (!teamMemberInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'teamMember.label', default: 'TeamMember'), params.id])}"
@@ -84,6 +97,7 @@ class TeamMemberController {
     }
 
     def edit = {
+		if(!enforceManager()){ return }
         def teamMemberInstance = TeamMember.get(params.id)
         if (!teamMemberInstance) {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'teamMember.label', default: 'TeamMember'), params.id])}"
@@ -95,6 +109,7 @@ class TeamMemberController {
     }
 
     def update = {
+		if(!enforceManager()){ return }
         def teamMemberInstance = TeamMember.get(params.id)
         if (teamMemberInstance) {
             if (params.version) {
@@ -122,6 +137,7 @@ class TeamMemberController {
     }
 
     def delete = {
+		if(!enforceManager()){ return }
         def teamMemberInstance = TeamMember.get(params.id)
         if (teamMemberInstance) {
             try {

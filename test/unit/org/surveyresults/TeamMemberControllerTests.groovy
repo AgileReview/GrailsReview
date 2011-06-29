@@ -11,6 +11,44 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
         super.tearDown()
     }
 	
+	void test_non_manager_cant_edit(){
+		onlyManagerCanDoIt 'edit()'
+	}
+	
+	void test_non_manager_cant_update(){
+		onlyManagerCanDoIt 'update()'
+	}
+	
+	void test_non_manager_cant_delete(){
+		onlyManagerCanDoIt 'delete()'
+	}
+	
+	void test_non_manager_cant_create(){
+		onlyManagerCanDoIt 'create()'
+	}
+	
+	void test_non_manager_cant_show(){
+		onlyManagerCanDoIt 'show()'
+	}
+	
+	void test_non_manager_cant_save(){
+		onlyManagerCanDoIt 'save()'
+	}
+	
+	void onlyManagerCanDoIt(def action){
+		def controller = new TeamMemberController()
+		controller.teamMemberService = mock_current_user(new TeamMember(role:new Role(name:'x')))
+		def code = "{->${action}}"
+		def shell = new GroovyShell()
+		def closure = shell.evaluate(code)
+		closure.delegate = controller
+		closure()
+		assertEquals 401,controller.response.status
+		assertEquals 'Only managers can do this',controller.response.errorMessage
+	}
+	
+
+	
 	void test_logout_clears_session_and_redirects_to_login(){
 		def session = [ : ]
 		TeamMemberController.metaClass.getSession = { -> session }

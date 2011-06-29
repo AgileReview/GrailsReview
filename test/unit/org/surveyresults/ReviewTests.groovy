@@ -26,6 +26,22 @@ class ReviewTests extends GrailsUnitTestCase {
 		assertEquals 1.5,res[3l]
 		assertEquals 3,res[4l]
     }
+
+	void test_comments_rolls_up_evaluation_comments() {
+		mockDomain(Review,[])
+		
+		def r = new Review()
+		def e1 = new Evaluation(comments:'foo')
+		
+		def e2 = new Evaluation(comments:'bar')
+		def e3 = new Evaluation(comments:null)
+		r.addToEvaluations(e1)
+		r.addToEvaluations(e2)
+		r.addToEvaluations(e3)
+	
+		def x = ['bar','foo']
+		assertEquals x,r.comments.sort()
+	}
 	
 	void test_maximum_results_rolls_up_evaluation_results() {
 		mockDomain(Review,[])

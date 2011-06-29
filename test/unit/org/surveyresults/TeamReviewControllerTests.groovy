@@ -22,8 +22,12 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
 		mockDomain(Answer,answers)
 		def trParam
 		def tmParam
+		def trParam2
+		def tmParam2
 		def revResult = []
+		def cmts = []
 		trCtrl.demand.resultsForTeamMember(){a,b->trParam=a;tmParam=b;revResult}
+		trCtrl.demand.commentsForTeamMember(){a,b->trParam2=a;tmParam2=b;cmts}
 		
 		def controller = new TeamReviewController()
 		controller.teamMemberService = tmCtrl.createMock()
@@ -32,10 +36,13 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
 		def result = controller.results()
 		assertEquals result['answers'],answers
 		assertSame result['reviewResults'],revResult
+		assertSame result['comments'],cmts
 		
 		trCtrl.verify()
 		assertSame tr,trParam
 		assertSame currentUser,tmParam
+		assertSame tr,trParam2
+		assertSame currentUser,tmParam2
 		
 		tmCtrl.verify()
     }

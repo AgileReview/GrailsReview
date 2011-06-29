@@ -37,12 +37,14 @@ class EvaluationTests extends GrailsUnitTestCase {
 		params['id'] = evaluation.id
 		params['responses[0].answer.id'] = "2"
 		params['complete'] = 'true'
+		params['comments'] = 'xyz'
 		def eval = Evaluation.get(params.id)
 		eval.properties = params
 		eval.save(failOnError:true)
 		eval = null
 		eval =  Evaluation.get(1)
 		assertEquals eval.responses.size(),1
+		assertEquals 'xyz',eval.comments
 		assertNotNull eval.responses.find {r -> r.answer.id==2 }
 		assertTrue eval.complete
 	}

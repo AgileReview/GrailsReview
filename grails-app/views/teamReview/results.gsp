@@ -26,6 +26,13 @@
 	  	</tr>
 	  </g:each>
   </table>
+  
+  <table>
+  	<tr><th>Comments</th></tr>
+  	<g:each var="comment" in="${comments}">
+  	<tr><td>${comment }</td></tr>
+  	</g:each>
+  </table>
   <br>
   Answer Key:<br>
   <table>

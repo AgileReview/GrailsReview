@@ -20,6 +20,7 @@ class BootStrap {
 				if(!TeamMember.count()){
 					new TeamMember(name:'Patrick',role:Role.findByName('Dev'),email:'patrick@p.com',password:'patrick').save(failOnError:true)
 					new TeamMember(name:'Dave',role:Role.findByName('Dev'),email:'dave@d.com',password:'dave').save(failOnError:true)
+					new TeamMember(name:'Mary',role:Role.findByName('QA'),email:'mary@m.com',password:'mary').save(failOnError:true)
 				}
 				if(!Question.count()){
 					new Question(text:'Works well with a team').save(failOnError:true)
@@ -66,6 +67,7 @@ class BootStrap {
 			resp.answer=Answer.findByText('Agree')
 			resp.save(failOnError:true)
 		}
+		eval.comments = 'this is a comment'
 		es.complete eval
 	}
 	def destroy = {

@@ -54,6 +54,7 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		rev.averageScores = [3l:2,4l:3]
 		rev.minimumScores = [3l:1,4l:2]
 		rev.maximumScores = [3l:5,4l:10]
+
 		
 		def trs = new TeamReviewService()
 		def res = trs.resultsForTeamMember(tr,tm)
@@ -65,5 +66,26 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		assertEquals 5,res[0].maxAnswer
 		assertEquals 8,res[0].teamAverage
 		assertEquals 10,res[0].roleAverage
+		
 	}
+	
+	void test_example_team_review_has_comments_calculated_correctly(){
+		
+		mockDomain(TeamReview,[])
+		mockDomain(Review,[])
+		def tm = new TeamMember(id:1)
+		
+		def tr = new TeamReview()
+
+		def rev = new Review(reviewee:tm)
+		def cmts = ['foo','bar']
+		rev.comments = cmts
+		tr.addToReviews(rev)
+		tr.addToReviews(new Review(comments:['bing','bang'],reviewee:new TeamMember(id:2)))
+
+		def trs = new TeamReviewService()
+		def res = trs.commentsForTeamMember(tr,tm)
+		assertEquals cmts,res
+	}
+
 }

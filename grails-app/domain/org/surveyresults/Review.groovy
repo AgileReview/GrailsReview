@@ -8,9 +8,10 @@ class Review {
 	def averageScores = null
 	def maximumScores = null
 	def minimumScores = null
+	def comments = null
 	static belongsTo = [teamReview:TeamReview]
 	static hasMany =[evaluations:Evaluation]
-	static transients = ['averageScores','minimumScores','maximumScores']
+	static transients = ['averageScores','minimumScores','maximumScores','comments']
 	
 	def getAverageScores(){
 		if(!averageScores){
@@ -27,6 +28,13 @@ class Review {
 			minimumScores = findMinOrMax(true)
 		}
 		minimumScores
+	}
+	
+	def getComments(){
+		if(!comments){
+			comments = evaluations.findAll { e->e.comments}.collect {e-> e.comments}
+		}
+		comments
 	}
 	
 	def getMaximumScores(){

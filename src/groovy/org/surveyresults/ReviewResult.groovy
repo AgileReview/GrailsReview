@@ -7,5 +7,4 @@ class ReviewResult {
 	double roleAverage
 	double minAnswer
 	double maxAnswer
-	def comments = []
 }

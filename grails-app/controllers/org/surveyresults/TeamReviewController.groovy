@@ -16,4 +16,16 @@ class TeamReviewController {
 		]
 		
 	}
+	
+	def create = {
+		
+	}
+	
+	def save = {
+		
+	}
+	
+	def show = {
+		
+	}
 }

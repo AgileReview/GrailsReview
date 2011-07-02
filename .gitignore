@@ -17,6 +17,8 @@
 # logs
 stacktrace.log
 /test/reports
-
+/.idea
+/out
+/*.iml
 # project release file
 *.war

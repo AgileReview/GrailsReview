@@ -51,9 +51,9 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 	
 	void test_logout_clears_session_and_redirects_to_login(){
 		def session = [ : ]
-		TeamMemberController.metaClass.getSession = { -> session }
-		def controller = new TeamMemberController()
 
+		def controller = new TeamMemberController()
+        controller.metaClass.getSession = { -> session }
 		session.teamMember = 'x'
 		controller.logout()
 		assertNull session.teamMember
@@ -64,12 +64,11 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 	void test_do_change_password_changes_pass_and_redirects_to_confirm_page(){
 		def session = [:]
 		def tm = new TeamMember(email:'me',password:'you',name:'x',role:new Role())
+        session.teamMember = tm
 		mockDomain(TeamMember,[tm])
-		
-		TeamMemberController.metaClass.getSession = { -> session }
-		session.teamMember = tm
-		
+
 		def controller = new TeamMemberController()
+        controller.metaClass.getSession = { -> session }
 		controller.params.newPassword = 'me'
 		controller.doChangePassword()
 		assertEquals 'index',controller.redirectArgs.action
@@ -80,9 +79,10 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
     void test_doLogin_redirects_to_teamMember_controller_when_login_successful() {
 		mockDomain(TeamMember,[new TeamMember(email:'me',password:'you',name:'x',role:new Role())])
 		def session = [ : ]
-		TeamMemberController.metaClass.getSession = { -> session }
+
 
 		def controller = new TeamMemberController()
+        controller.metaClass.getSession = { -> session }
 		controller.params.email = 'me'
 		controller.params.password = 'you'
 		controller.doLogin()
@@ -95,9 +95,10 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 	void test_doLogin_redirects_to_login_controller_when_login_wrong() {
 		mockDomain(TeamMember,[new TeamMember(email:'me',password:'them',name:'x',role:new Role())])
 		def session = [ : ]
-		TeamMemberController.metaClass.getSession = { -> session }
+
 
 		def controller = new TeamMemberController()
+        controller.metaClass.getSession = { -> session }
 		controller.params.email = 'me'
 		controller.params.password = 'you'
 		controller.doLogin()

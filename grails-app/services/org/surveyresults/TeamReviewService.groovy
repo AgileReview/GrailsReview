@@ -3,6 +3,8 @@ package org.surveyresults
 class TeamReviewService {
 
     static transactional = true
+    ReviewService reviewService
+
 
 	def reviewCompleted(def teamReview){
 		def incomplete = teamReview.reviews.find { e-> e.complete == false}
@@ -11,6 +13,12 @@ class TeamReviewService {
 			teamReview.save()
 		}
 	}
+
+    def createTeamReview(def name){
+        def tr = new TeamReview(name:name)
+        TeamMember.list().each{tm->tr.addToReviews reviewService.createBlankReview(tm,tr)}
+        tr
+    }
 	
 	def resultsForTeamMember(def teamReview,def teamMember){
 		def reviewForUser = teamReview.reviews.find { r->r.reviewee.id == teamMember.id}

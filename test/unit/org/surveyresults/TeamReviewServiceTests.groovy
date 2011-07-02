@@ -1,6 +1,7 @@
 package org.surveyresults
 
 import grails.test.*
+import groovy.mock.interceptor.MockFor
 
 class TeamReviewServiceTests extends GrailsUnitTestCase {
     protected void setUp() {
@@ -11,11 +12,36 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
+    void test_create_creates_a_team_review_for_each_person_on_the_team(){
+        def team = [new TeamMember(name:'fred'),new TeamMember(name:'gary')]
+        mockDomain(TeamMember,team)
+        mockDomain(TeamReview,[])
+        def r1,r2
+        r1= new Review()
+        r2 = new Review()
+        def trParams = []
+        def tmParams = []
+        def eCtrl = mockFor(ReviewService)
+        eCtrl.demand.createBlankReview(2){x,y->trParams << y;tmParams<<x;new Review()}
+        def trs = new TeamReviewService()
+        trs.reviewService = eCtrl.createMock()
+        def tr = trs.createTeamReview('foo')
+        def paramCompare = [tr,tr]
+        assertEquals 'foo',tr.name
+
+        assertEquals paramCompare, trParams
+        assertEquals team,tmParams
+        assertEquals 2,tr.reviews.size()
+        eCtrl.verify()
+
+    }
+
     void test_completing_a_review_when_other_reviews_are_complete_completes_teamreview_and_saves() {
 		mockDomain(TeamReview,[])
 		def saved = false
-		TeamReview.metaClass.save = {-> saved=true}
+
 		def tr = new TeamReview(complete:false)
+        tr.metaClass.save = {-> saved=true}
 		tr.addToReviews(new Review(complete:true))
 		tr.addToReviews(new Review(complete:true))
 		def rs = new TeamReviewService()
@@ -27,8 +53,9 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 	void test_completing_an_evaluation_when_other_evaluations_are_not_complete_does_not_complete_review_and_does_not_save() {
 		mockDomain(TeamReview,[])
 		def saved = false
-		TeamReview.metaClass.save = {-> saved=true}
+
 		def tr = new TeamReview(complete:false)
+        tr.metaClass.save = {-> saved=true}
 		tr.addToReviews(new Review(complete:false))
 		tr.addToReviews(new Review(complete:true))
 		def rs = new TeamReviewService()

@@ -21,8 +21,9 @@ class ReviewServiceTests extends GrailsUnitTestCase {
 		def tr = new TeamReview()
 		trCtrl.demand.reviewCompleted(){r->trParam = r}
 		def saved = false
-		Review.metaClass.save = {-> saved=true}
+
 		def review = new Review(complete:false,teamReview:tr)
+        review.metaClass.save = {-> saved=true}
 		review.addToEvaluations(new Evaluation(complete:true))
 		review.addToEvaluations(new Evaluation(complete:true))
 		def rs = new ReviewService()

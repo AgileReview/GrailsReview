@@ -16,9 +16,9 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 		def review = new Review()
 		def evCtrl = new MockFor(Evaluation)
 		evCtrl.demand.setComplete{b->null}
-		evCtrl.demand.validate{true}
 
-		evCtrl.demand.save{true}
+
+		evCtrl.demand.save{->true}
 		evCtrl.demand.getReview{review}
 		def rCtrl = mockFor(ReviewService)
 		
@@ -37,7 +37,7 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 
 		def evCtrl = new MockFor(Evaluation)
         evCtrl.demand.setComplete{b->null}
-		evCtrl.demand.validate{false}
+		evCtrl.demand.save{->false}
 
 		def es = new EvaluationService()
 		boolean res

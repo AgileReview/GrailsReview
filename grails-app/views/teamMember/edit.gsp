@@ -1,6 +1,6 @@
 
 
-<%@ page import="org.surveyresults.TeamMember" %>
+<%@ page import="org.org.agilereview.TeamMember" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -63,7 +63,7 @@
                                   <label for="role"><g:message code="teamMember.role.label" default="Role" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: teamMemberInstance, field: 'role', 'errors')}">
-                                    <g:select name="role.id" from="${org.surveyresults.Role.list()}" optionValue="name" optionKey="id" value="${teamMemberInstance?.role?.id}"  />
+                                    <g:select name="role.id" from="${org.agilereview.Role.list()}" optionValue="name" optionKey="id" value="${teamMemberInstance?.role?.id}"  />
                                 </td>
                             </tr>
                         

@@ -1,4 +1,4 @@
-<%@ page import="org.surveyresults.*" %>
+<%@ page import="org.agilereview.*" %>
 
 <html>
     <head>

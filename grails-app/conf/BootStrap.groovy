@@ -1,4 +1,4 @@
-import org.surveyresults.*
+import org.agilereview.*
 import grails.util.GrailsUtil
 class BootStrap {
 

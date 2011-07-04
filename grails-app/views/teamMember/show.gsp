@@ -1,5 +1,5 @@
 
-<%@ page import="org.surveyresults.TeamMember" %>
+<%@ page import="org.agilereview.TeamMember" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

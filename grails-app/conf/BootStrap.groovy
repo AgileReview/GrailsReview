@@ -15,6 +15,8 @@ class BootStrap {
 			new Answer(text:'Agree',value:4).save(failOnError:true)
 			new Answer(text:'Strongly Agree',value:5).save(failOnError:true)
 		}
+        println "environment follows"
+        println GrailsUtil.environment
 		switch(GrailsUtil.environment){
 			case ["development","test"]:
 				if(!TeamMember.count()){
@@ -29,7 +31,7 @@ class BootStrap {
 				if(!TeamReview.count()){
 					initReviews()
 				}
-			case "prod":
+			case "production":
 				if(!Question.count()){
 					new Question(text:'Works well with a team').save(failOnError:true)
 					new Question(text:'Stays at the top of their profession').save(failOnError:true)
@@ -41,6 +43,9 @@ class BootStrap {
 					new Question(text:'Writes great code').save(failOnError:true)
 					new Question(text:'Writes great tests').save(failOnError:true)
 				}
+                if(!TeamMember.count()){
+                    new TeamMember(name:'Admin',role:Role.findByName('Manager'),email:'admin@p.com',password:'admin').save(failOnError:true)
+                }
 		}
 	}
 	

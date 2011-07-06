@@ -19,15 +19,6 @@ class TeamMemberController {
 	
 	def login = {}
 	
-	def changePassword = {}
-	
-	def doChangePassword = {
-		def tm = TeamMember.get(session.teamMember.id)
-		tm.password = params.newPassword
-		flash.message = 'Your password has been changed.'
-		redirect(action:'index')
-	}
-	
 	def logout = {
 		session.teamMember = null
 		redirect(action:'login')

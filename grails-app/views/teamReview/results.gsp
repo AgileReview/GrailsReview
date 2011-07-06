@@ -9,8 +9,8 @@
   <div class="body">
   <table>
   	<tr><th>Question</th>
-  		<th>Your Average Score</th>
-  		<th>Role Average Score</th>
+  		<th>Your Average</th>
+  		<th>Role Average</th>
   		<th>Team Average</th>
   		<th>Your Max Score</th>
   		<th>Your Min Score</th>

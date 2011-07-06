@@ -11,7 +11,7 @@
     	<div class="message">${flash.message}</div>
     </g:if>
     <g:if test="${teamMemberViewModel.evaluationsToComplete}">
-        <div>
+        <div class="body">
             You have evaluations to complete!  Click on your team member to review them:<br>
         <table>
             <tr>
@@ -26,12 +26,12 @@
         </g:each>
         </table>
 
-        </div>
+
     </g:if>
     <BR>
     <div>View your results...</div>
     
-    <div>
+
     <g:each var="review" in="${teamMemberViewModel.resultsToView}">
     <span><g:link controller="teamReview" action="results" params="[id:review.teamReview.id]">${review.teamReview.name}</g:link></span><br>
     </g:each>

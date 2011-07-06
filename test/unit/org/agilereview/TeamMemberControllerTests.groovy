@@ -12,39 +12,103 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
     }
 	
 	void test_non_manager_cant_edit(){
-		onlyManagerCanDoIt 'edit()'
+		onlyManagerCanEditAnothersRecord 'edit()'
 	}
 	
 	void test_non_manager_cant_update(){
-		onlyManagerCanDoIt 'update()'
+		onlyManagerCanEditAnothersRecord 'update()'
 	}
 	
 	void test_non_manager_cant_delete(){
-		onlyManagerCanDoIt 'delete()'
+		onlyManagerCanEditAnothersRecord 'delete()'
 	}
 	
 	void test_non_manager_cant_create(){
-		onlyManagerCanDoIt 'create()'
+		onlyManagerCanEditAnothersRecord 'create()'
 	}
 	
 	void test_non_manager_cant_show(){
-		onlyManagerCanDoIt 'show()'
+		onlyManagerCanEditAnothersRecord 'show()'
 	}
 	
 	void test_non_manager_cant_save(){
-		onlyManagerCanDoIt 'save()'
+		onlyManagerCanEditAnothersRecord 'save()'
 	}
-	
-	void onlyManagerCanDoIt(def action){
+
+    void teamMemberCantManageOthersRecord(def action){
+ 		def controller = new TeamMemberController()
+
+        def crntUser = new TeamMember(id:1,role:new Role(name:'x'))
+        mockDomain(TeamMember,[new TeamMember(id:2,role:new Role(name:'x')),crntUser])
+        def tmService =  mock_current_user(crntUser)
+		controller.teamMemberService =  tmService
+        controller.params.id = 2 //not current users id
+		def code = "{->${action}}"
+		def shell = new GroovyShell()
+		def closure = shell.evaluate(code)
+		closure.delegate = controller
+		closure()
+
+		assertEquals 401,controller.response.status
+		assertEquals 'Only managers can manage other users profiles.',controller.response.errorMessage
+    }
+
+    void test_teamMember_cant_edit_others_record(){
+        teamMemberCantManageOthersRecord('edit()')
+    }
+
+        void test_teamMember_cant_show_others_record(){
+        teamMemberCantManageOthersRecord('show()')
+    }
+
+        void test_teamMember_cant_update_others_record(){
+        teamMemberCantManageOthersRecord('update()')
+    }
+
+
+     void test_teamMember_can_edit_own_record(){
+        teamMemberCanDoIt('edit()')
+    }
+
+    void test_teamMember_can_save_own_record(){
+        teamMemberCanDoIt('save()')
+    }
+
+    void test_teamMember_can_show_own_record(){
+        teamMemberCanDoIt('show()')
+    }
+
+
+
+    void teamMemberCanDoIt(def action){
+ 		def controller = new TeamMemberController()
+
+        def crntUser = new TeamMember(id:1,role:new Role(name:'x'))
+        mockDomain(TeamMember,[new TeamMember(id:2,role:new Role(name:'x')),crntUser])
+        def tmService =  mock_current_user(crntUser)
+		controller.teamMemberService =  tmService
+        controller.params.id = 1 // current users id
+		def code = "{->${action}}"
+		def shell = new GroovyShell()
+		def closure = shell.evaluate(code)
+		closure.delegate = controller
+		closure()
+
+		assertEquals 200,controller.response.status
+    }
+
+	void onlyManagerCanEditAnothersRecord(def action){
 		def controller = new TeamMemberController()
-		controller.teamMemberService = mock_current_user(new TeamMember(role:new Role(name:'x')))
+
+        controller.params.id  =2 //sets the parameter of the user being edited to something other than current user
+		controller.teamMemberService = mock_current_user(new TeamMember(id:1,role:new Role(name:'x')))
 		def code = "{->${action}}"
 		def shell = new GroovyShell()
 		def closure = shell.evaluate(code)
 		closure.delegate = controller
 		closure()
 		assertEquals 401,controller.response.status
-		assertEquals 'Only managers can do this',controller.response.errorMessage
+		assertEquals 'Only managers can manage other users profiles.',controller.response.errorMessage
 	}
 	
 
@@ -142,7 +206,7 @@ class TeamMemberControllerTests extends ControllerUnitTestCase {
 	}
 	def mock_current_user(def user){
 		def teamMemberServiceController = mockFor(TeamMemberService)
-		teamMemberServiceController.demand.getCurrentTeamMember(){user}
+		teamMemberServiceController.demand.getCurrentTeamMember(1..2){user}
 		teamMemberServiceController.createMock()
 	}
 }

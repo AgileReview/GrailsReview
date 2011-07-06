@@ -16,8 +16,14 @@ body {
     color: #333;
     font: 11px verdana, arial, helvetica, sans-serif;
 }
-#grailsLogo {
-	padding:20px;
+#arLogo {
+    background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;
+    border: 1px solid #ccc;
+    border-style: solid none solid none;
+    margin-top: 5px;
+    padding: 7px 12px;
+    margin-bottom: 10px;
+    font-size: large;
 }
 
 a:link, a:visited, a:hover {
@@ -65,9 +71,9 @@ input:focus, select:focus, textarea:focus {
 /* NAVIGATION MENU */
 
 .nav {
-    background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;
-    border: 1px solid #ccc;
-    border-style: solid none solid none;
+    /*background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;   */
+    border-bottom: 1px solid #ccc;
+    border-bottom-style: solid none solid none;
     margin-top: 5px;
     padding: 7px 12px;
 }

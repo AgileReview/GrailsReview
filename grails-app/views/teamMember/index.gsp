@@ -10,13 +10,24 @@
     <g:if test="${flash.message}">
     	<div class="message">${flash.message}</div>
     </g:if>
-	<div>Welcome ${teamMemberViewModel.teamMember.name}!</div>
-    <div>Please complete reviews for the following team members:</div>
-    <div>
-    <g:each var="evaluation" in="${teamMemberViewModel.evaluationsToComplete}">
-    <span><g:link controller="evaluation" action="update" params="[evaluationID:evaluation.id]">${evaluation.review.reviewee.name}</g:link></span><br>
-    </g:each>
-    </div>
+    <g:if test="${teamMemberViewModel.evaluationsToComplete}">
+        <div>
+            You have evaluations to complete!  Click on your team member to review them:<br>
+        <table>
+            <tr>
+                <th>Team Member</th>
+                <th>Team Review</th>
+            </tr>
+            <g:each var="evaluation" in="${teamMemberViewModel.evaluationsToComplete}">
+            <tr>
+                <td><g:link controller="evaluation" action="update" params="[evaluationID:evaluation.id]">${evaluation.review.reviewee.name}</g:link></td>
+                <td>${evaluation.review.teamReview.name}</td>
+            </tr>
+        </g:each>
+        </table>
+
+        </div>
+    </g:if>
     <BR>
     <div>View your results...</div>
     
@@ -25,9 +36,6 @@
     <span><g:link controller="teamReview" action="results" params="[id:review.teamReview.id]">${review.teamReview.name}</g:link></span><br>
     </g:each>
     </div>
-    <br>
-    <div>
-    <span><g:link action="changePassword">Change password</g:link></span>
-    </div>
+    <
     </body>
 </html>

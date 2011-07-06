@@ -11,11 +11,14 @@
         <div id="spinner" class="spinner" style="display:none;">
             <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
         </div>
-        <div id="grailsLogo">
+        <div id="arLogo">
         <span><g:link controller="teamMember">Agile Review</g:link> - early. often.  team based.</span>
         <g:if  test="${session.teamMember}">
-        	<span style="display: block; text-align: right"><g:link controller="teamMember" action="logout">logout</g:link></span></div>
+        	<span style="display: block; text-align: right;font-size: small">
+        	Logged in as:<g:link controller="teamMember" action="show" id="${session.teamMember.id}">${session.teamMember.name}</g:link>
+            <g:link controller="teamMember" action="logout" style="font-size:x-small">logout</g:link></span></div>
        	</g:if>
+        </div>
         <g:layoutBody />
     </body>
 </html>

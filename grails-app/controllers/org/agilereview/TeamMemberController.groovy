@@ -65,11 +65,11 @@ class TeamMemberController {
 	
 	def enforceManager(){
 		def tm = teamMemberService.getCurrentTeamMember(session)
-		if(tm?.role?.name !='Manager'){
-			response.sendError 401,'Only managers can do this'
-			return false
+		if((tm?.role?.name =='Manager') || params.id.toString() == tm.id.toString()){
+            return true
 		}
-		true
+		response.sendError 401,'Only managers can manage other users profiles.'
+		return false
 	}
 
     def save = {
@@ -97,6 +97,7 @@ class TeamMemberController {
     }
 
     def edit = {
+
 		if(!enforceManager()){ return }
         def teamMemberInstance = TeamMember.get(params.id)
         if (!teamMemberInstance) {

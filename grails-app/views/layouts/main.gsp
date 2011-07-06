@@ -11,12 +11,12 @@
         <div id="spinner" class="spinner" style="display:none;">
             <img src="${resource(dir:'images',file:'spinner.gif')}" alt="${message(code:'spinner.alt',default:'Loading...')}" />
         </div>
-        <div id="arLogo">
-        <span><g:link controller="teamMember">Agile Review</g:link> - early. often.  team based.</span>
+        <div id="arLogo" >
+        <span style="display: inline-block;align:left;width:50%"><g:link controller="teamMember">Agile Review</g:link> - early. often.  team based.</span>
         <g:if  test="${session.teamMember}">
-        	<span style="display: block; text-align: right;font-size: small">
+        	<span style="text-align:right;font-size: small;display:inline-block;width:40%;align:right">
         	Logged in as:<g:link controller="teamMember" action="show" id="${session.teamMember.id}">${session.teamMember.name}</g:link>
-            <g:link controller="teamMember" action="logout" style="font-size:x-small">logout</g:link></span></div>
+            <g:link controller="teamMember" action="logout" style="font-size:x-small">logout</g:link></span>
        	</g:if>
         </div>
         <g:layoutBody />

@@ -36,6 +36,5 @@
     <span><g:link controller="teamReview" action="results" params="[id:review.teamReview.id]">${review.teamReview.name}</g:link></span><br>
     </g:each>
     </div>
-    <
     </body>
 </html>

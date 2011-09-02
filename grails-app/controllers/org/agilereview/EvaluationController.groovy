@@ -27,7 +27,7 @@ class EvaluationController {
 		def eval = Evaluation.get(params.id)
 		
 		eval.properties = params
-		
+
 		
 		if(evaluationService.complete(eval)){
 			redirect(controller:"teamMember",action:"index")

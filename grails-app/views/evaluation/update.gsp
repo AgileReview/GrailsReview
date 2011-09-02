@@ -25,9 +25,10 @@
     		
     		<tr><td>${resp.question.id }</td><td>${resp.question.text}</td>
     		<td>
-    		
+
     		<g:each var="answer" in="${evaluationViewModel.answers}">
-    		<g:radio name="responses[${i}].answer.id" value="${answer.id}"/>${answer.value}
+
+    		<g:radio name="responses[${i}].answer.id" value="${answer.id}" checked="${answer.id == resp.answer?.id}"/>${answer.value}
     		</g:each>
     		</td>
     		</tr>
@@ -36,7 +37,7 @@
     </div>
     <div>
     	<span>Please enter any free form comments below:</span><br>
-    	<span></span><g:textArea name="comments"></g:textArea></span>
+    	<span></span><g:textArea name="comments" value="${evaluationViewModel.evaluationInstance.comments}" /></span>
     	
     </div>
     <g:submitButton name="complete evaluation"></g:submitButton>

@@ -12,14 +12,8 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
-    void test_create_creates_a_team_review_for_each_person_on_the_team_except_manager(){
-        def managerRole = new Role(name:'Manager',id:1)
-        def nonManagerRole = new Role(name:'x',id:2)
-        mockDomain(Role,[managerRole,nonManagerRole])
-        def team = [new TeamMember(name:'fred',role: nonManagerRole),
-                new TeamMember(name:'gary',role: nonManagerRole)
-                ,new TeamMember(name:'admin',role: managerRole)]
-
+    void test_create_creates_a_team_review_for_each_person_on_the_team(){
+        def team = [new TeamMember(name:'fred'),new TeamMember(name:'gary')]
         mockDomain(TeamMember,team)
         mockDomain(TeamReview,[])
         def r1,r2
@@ -36,8 +30,7 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
         assertEquals 'foo',tr.name
 
         assertEquals paramCompare, trParams
-        assertEquals team.findAll{t->t.role.name != 'Manager'},tmParams
-
+        assertEquals team,tmParams
         assertEquals 2,tr.reviews.size()
         eCtrl.verify()
 

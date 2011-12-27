@@ -8,7 +8,7 @@ class TeamMemberController {
 		def currentUser = teamMemberService.getCurrentTeamMember(session)
 		
 		if(!currentUser){
-			redirect(action:'login')
+			redirect action: "login"
 			return
 		}
 		def evaluationsToComplete = reviewService.evaluationsLeftToComplete(currentUser)

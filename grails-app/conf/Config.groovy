@@ -29,3 +29,5 @@ if (externalDataSource) {
 grails.config.locations.each {
   println "[INFO] Including configuration file [${it}] in configuration building."
 }
+grails.views.default.codec="none" // none, html, base64
+grails.views.gsp.encoding="UTF-8"

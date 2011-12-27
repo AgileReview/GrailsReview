@@ -7,7 +7,9 @@ class TeamMember {
 	String email
 	String password
 
-
+    static mapping = {
+        password column: '`password`'
+    }
     static constraints = {
     }
 }

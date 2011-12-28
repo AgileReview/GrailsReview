@@ -23,8 +23,8 @@ class TeamReviewTests extends GrailsUnitTestCase {
 		tr.addToReviews(r2)
 		def res = tr.averageScores
 		
-		assertEquals 1.5,res[3l]
-		assertEquals 3,res[4l]
+		assertEquals 1.5,res[3l],0
+		assertEquals 3,res[4l],0
     }
 	
 	void test_average_results_by_role_only_includes_given_role(){
@@ -45,7 +45,7 @@ class TeamReviewTests extends GrailsUnitTestCase {
 		tr.addToReviews(r3)
 		def res = tr.getAverageScores(rl1)
 		
-		assertEquals 1.5,res[3l]
-		assertEquals 3,res[4l]
+		assertEquals 1.5,res[3l],0
+		assertEquals 3,res[4l],0
 	}
 }

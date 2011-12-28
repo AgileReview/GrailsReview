@@ -15,11 +15,11 @@ class EvaluationService {
 	
 	def complete(evaluation){
         evaluation.complete = true
-		if(evaluation.save()){
-			reviewService.evaluationCompleted evaluation.review
-			return true
+		if(!evaluation.save()){
+            return false
 		}
-		return false
+        reviewService.evaluationCompleted evaluation.review
+        return true
 	}
 	
 	

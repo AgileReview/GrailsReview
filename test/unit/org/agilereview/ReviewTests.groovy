@@ -23,8 +23,8 @@ class ReviewTests extends GrailsUnitTestCase {
 		r.addToEvaluations(e2)
 		def res = r.averageScores
 		
-		assertEquals 1.5,res[3l]
-		assertEquals 3,res[4l]
+		assertEquals 1.5,res[3l],0
+		assertEquals 3,res[4l],0
     }
 
 	void test_comments_rolls_up_evaluation_comments() {

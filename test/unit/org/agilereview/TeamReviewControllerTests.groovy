@@ -15,11 +15,10 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
     void test_save_calls_service_saves_returns_new_teamreview(){
         def trsCtrl = mockFor(TeamReviewService)
         def saved = false
-
+        mockDomain(TeamReview,[])
         def tr = new TeamReview()
-        tr.metaClass.save = {x->saved=true}
         def nameParam
-        trsCtrl.demand.createTeamReview(){n->nameParam=n;tr}
+        trsCtrl.demand.createTeamReview(){n->nameParam=n;tr.name='x';tr}
 
         def controller = new TeamReviewController()
         controller.metaClass.message = { Map p -> return "foo" }
@@ -28,7 +27,7 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
         def res = controller.save()
         assertEquals 'show',controller.redirectArgs.action
         assertEquals nameParam,'name'
-        assertTrue saved
+        assertNotNull tr.id
         trsCtrl.verify()
 
     }

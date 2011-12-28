@@ -36,12 +36,12 @@ class TeamReviewController {
 
     def save = {
         def teamReviewInstance = teamReviewService.createTeamReview(params.name)
-        if (teamReviewInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'teamReview.label', default: 'TeamReview'), teamReviewInstance.id])}"
-            redirect(action: "show", id: teamReviewInstance.id)
+        if (!teamReviewInstance.save(flush: true)) {
+            render(view: "create", model: [teamReviewInstance: teamReviewInstance])
         }
         else {
-            render(view: "create", model: [teamReviewInstance: teamReviewInstance])
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'teamReview.label', default: 'TeamReview'), teamReviewInstance.id])}"
+            redirect(action: "show", id: teamReviewInstance.id)
         }
     }
 

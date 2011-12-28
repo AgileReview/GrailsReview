@@ -40,28 +40,27 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		mockDomain(TeamReview,[])
 		def saved = false
 
-		def tr = new TeamReview(complete:false)
-        tr.metaClass.save = {-> saved=true}
+		def tr = new TeamReview(complete:false,name: 'x')
+        //tr.metaClass.save = {-> saved=true}
 		tr.addToReviews(new Review(complete:true))
 		tr.addToReviews(new Review(complete:true))
 		def rs = new TeamReviewService()
 		rs.reviewCompleted tr
 		assertTrue tr.complete
-		assertTrue saved
+		assertNotNull tr.id
     }
 	
 	void test_completing_an_evaluation_when_other_evaluations_are_not_complete_does_not_complete_review_and_does_not_save() {
 		mockDomain(TeamReview,[])
 		def saved = false
 
-		def tr = new TeamReview(complete:false)
-        tr.metaClass.save = {-> saved=true}
+		def tr = new TeamReview(complete:false,name: 'x')
 		tr.addToReviews(new Review(complete:false))
 		tr.addToReviews(new Review(complete:true))
 		def rs = new TeamReviewService()
 		rs.reviewCompleted tr
 		assertFalse tr.complete
-		assertFalse saved
+		assertNull tr.id
 	}
 		
 	void test_example_team_review_has_results_calculated_correctly(){
@@ -88,11 +87,11 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
 		assertEquals 2,res.size()
 		res.each {r->assertEquals org.agilereview.ReviewResult,r.class}
 		assertEquals 3l,res[0].question.id
-		assertEquals 2,res[0].yourScore
-		assertEquals 1,res[0].minAnswer
-		assertEquals 5,res[0].maxAnswer
-		assertEquals 8,res[0].teamAverage
-		assertEquals 10,res[0].roleAverage
+		assertEquals 2,res[0].yourScore ,0
+		assertEquals 1,res[0].minAnswer,0
+		assertEquals 5,res[0].maxAnswer,0
+		assertEquals 8,res[0].teamAverage ,0
+		assertEquals 10,res[0].roleAverage ,0
 		
 	}
 	

@@ -14,37 +14,36 @@ class EvaluationServiceTests extends GrailsUnitTestCase {
 	
 	void test_complete_sets_user_sets_complete_saves_and_calls_review_service(){
 		def review = new Review()
-		def evCtrl = new MockFor(Evaluation)
-		evCtrl.demand.setComplete{b->null}
+        def evaluation = new Evaluation(review: review,responder: new TeamMember())
+		mockDomain(Evaluation,[evaluation])
 
-
-		evCtrl.demand.save{->true}
-		evCtrl.demand.getReview{review}
 		def rCtrl = mockFor(ReviewService)
 		
 		def rParam
 		rCtrl.demand.evaluationCompleted(){r->rParam=r}
 		def es = new EvaluationService()
 		es.reviewService = rCtrl.createMock()
-		evCtrl.use{
-			assertTrue es.complete(new Evaluation())
-		}
+		assertTrue es.complete(evaluation)
+		assertTrue evaluation.complete
+        assertNotNull evaluation.id
 		assertSame rParam,review
 		rCtrl.verify()
 	}
 	
 	void test_complete_when_eval_is_invalid_sets_returns_false(){
 
-		def evCtrl = new MockFor(Evaluation)
-        evCtrl.demand.setComplete{b->null}
-		evCtrl.demand.save{->false}
+        mockDomain(Evaluation,[])
+        def eval = new Evaluation()
+        //make sure this thing won't save
+        assertNull eval.id
+        assertNull eval.save()
+        assertNull eval.id
+
 
 		def es = new EvaluationService()
-		boolean res
-		evCtrl.use{
-			res= es.complete(new Evaluation())
-		}
-		assertFalse res
+		assertFalse es.complete(eval)
+        assertTrue eval.complete
+        assertNull eval.id
 	}
 
     void test_when_creating_a_blank_evaluation_all_questions_are_available_in_order() {

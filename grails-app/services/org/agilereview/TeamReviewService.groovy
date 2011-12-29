@@ -14,10 +14,9 @@ class TeamReviewService {
 		}
 	}
 
-    def createTeamReview(def name){
+    def createTeamReview(def name,def peopleToReview){
         def tr = new TeamReview(name:name)
-        def managerRole =  Role.findByName('Manager')
-        TeamMember.findAllByRoleNotEqual(managerRole).each{tm->tr.addToReviews reviewService.createBlankReview(tm,tr)}
+        peopleToReview.each{tm->tr.addToReviews reviewService.createBlankReview(tm,tr)}
         tr
     }
 	

@@ -12,16 +12,16 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
-    void test_create_creates_a_team_review_for_each_person_on_the_team_except_manager(){
-        def managerRole = new Role(name:'Manager',id:1)
-        def nonManagerRole = new Role(name:'x',id:2)
-        mockDomain(Role,[managerRole,nonManagerRole])
-        def team = [new TeamMember(name:'fred',role: nonManagerRole),
-                new TeamMember(name:'gary',role: nonManagerRole)
-                ,new TeamMember(name:'admin',role: managerRole)]
+    void test_create_creates_a_team_review_for_each_person_requested(){
+        def team = [new TeamMember(name:'fred'),
+                new TeamMember(name:'gary')
+                ,new TeamMember(name:'jerry')]
 
         mockDomain(TeamMember,team)
         mockDomain(TeamReview,[])
+
+        def peopleToReview = team.findAll{t->t.name == 'fred' || t.name=='jerry'}
+        assertEquals peopleToReview.size(),2
         def r1,r2
         r1= new Review()
         r2 = new Review()
@@ -31,12 +31,12 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
         eCtrl.demand.createBlankReview(2){x,y->trParams << y;tmParams<<x;new Review()}
         def trs = new TeamReviewService()
         trs.reviewService = eCtrl.createMock()
-        def tr = trs.createTeamReview('foo')
+        def tr = trs.createTeamReview('foo',peopleToReview)
         def paramCompare = [tr,tr]
         assertEquals 'foo',tr.name
 
         assertEquals paramCompare, trParams
-        assertEquals team.findAll{t->t.role.name != 'Manager'},tmParams
+        assertEquals peopleToReview,tmParams
 
         assertEquals 2,tr.reviews.size()
         eCtrl.verify()

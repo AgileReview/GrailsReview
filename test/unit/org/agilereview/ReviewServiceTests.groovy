@@ -11,8 +11,25 @@ class ReviewServiceTests extends GrailsUnitTestCase {
     protected void tearDown() {
         super.tearDown()
     }
-	
-	
+
+    void test_creating_a_review_creates_evaluations_for_each_team_member_except_reviewee() {
+        mockDomain(Review, [])
+        mockDomain(TeamMember, [])
+        def team = [new TeamMember(name: 'fred'),
+                new TeamMember(name: 'gary')
+                , new TeamMember(name: 'jerry')]
+        def evCtrl = mockFor(EvaluationService)
+        def evParams = []
+        evCtrl.demand.createBlankEvaluation(2) {x -> evParams << x; new Evaluation()}
+
+        def reviewService = new ReviewService()
+        reviewService.evaluationService = evCtrl.createMock()
+        def review = reviewService.createBlankReview(team.find {x->x.name=='fred'},team)
+        assertEquals review.evaluations.size(),2
+        assertEquals evParams, team.findAll {x->x.name!='fred'}
+
+        evCtrl.verify()
+    }
 
     void test_completing_an_evaluation_when_other_evaluations_are_complete_completes_review_and_saves() {
 		mockDomain(Review,[])

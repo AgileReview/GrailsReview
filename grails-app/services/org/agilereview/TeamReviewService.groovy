@@ -16,7 +16,7 @@ class TeamReviewService {
 
     def createTeamReview(def name,def peopleToReview){
         def tr = new TeamReview(name:name)
-        peopleToReview.each{tm->tr.addToReviews reviewService.createBlankReview(tm,tr)}
+        peopleToReview.each{tm->tr.addToReviews reviewService.createBlankReview(tm,peopleToReview)}
         tr
     }
 	

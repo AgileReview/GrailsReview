@@ -31,11 +31,13 @@ class TeamReviewController {
     def create = {
         def teamReviewInstance = new TeamReview()
         teamReviewInstance.properties = params
-        return [teamReviewInstance: teamReviewInstance]
+        return [teamReviewInstance: teamReviewInstance,teamMembers:TeamMember.list()]
     }
 
     def save = {
-        def teamReviewInstance = teamReviewService.createTeamReview(params.name)
+        def team = TeamMember.findAllByIdInList(params.teamMembers.collect {id->id.toLong()})
+        def teamReviewInstance = teamReviewService.createTeamReview(params.name,team)
+
         if (!teamReviewInstance.save(flush: true)) {
             render(view: "create", model: [teamReviewInstance: teamReviewInstance])
         }

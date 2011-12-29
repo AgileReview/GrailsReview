@@ -49,7 +49,7 @@ class ReviewService {
     def createBlankReview(def reviewee,def team) {
 		
 		def review = new Review(reviewee:reviewee)
-		team.findAll {x->x!= reviewee}.each{ t-> review.addToEvaluations(evaluationService.createBlankEvaluation(t))}
+		team.findAll {x->x != reviewee}.each{ t-> review.addToEvaluations(evaluationService.createBlankEvaluation(t))}
 		review
     }
 	

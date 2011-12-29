@@ -13,20 +13,24 @@ class TeamReviewControllerTests extends ControllerUnitTestCase {
     }
 
     void test_save_calls_service_saves_returns_new_teamreview(){
+        mockDomain(TeamMember,[new TeamMember(id: 1,name: 'fred'),new TeamMember(id: 2,name: 'fred'),new TeamMember(id: 3,name:'no one')])
+        def teamList = ['1','2']
         def trsCtrl = mockFor(TeamReviewService)
         def saved = false
         mockDomain(TeamReview,[])
         def tr = new TeamReview()
-        def nameParam
-        trsCtrl.demand.createTeamReview(){n->nameParam=n;tr.name='x';tr}
+        def nameParam,teamParam
+        trsCtrl.demand.createTeamReview(){n,t->nameParam=n;tr.name='x';teamParam=t;tr}
 
         def controller = new TeamReviewController()
         controller.metaClass.message = { Map p -> return "foo" }
         controller.params.name = 'name'
+        controller.params.teamMembers = teamList
         controller.teamReviewService = trsCtrl.createMock()
         def res = controller.save()
         assertEquals 'show',controller.redirectArgs.action
         assertEquals nameParam,'name'
+        assertEquals teamParam,TeamMember.findAllByNameNotEqual('no one')
         assertNotNull tr.id
         trsCtrl.verify()
 

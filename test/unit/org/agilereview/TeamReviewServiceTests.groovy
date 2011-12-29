@@ -23,19 +23,18 @@ class TeamReviewServiceTests extends GrailsUnitTestCase {
         def peopleToReview = team.findAll{t->t.name == 'fred' || t.name=='jerry'}
         assertEquals peopleToReview.size(),2
         def r1,r2
-        r1= new Review()
-        r2 = new Review()
+
         def trParams = []
-        def tmParams = []
+        def tmParams
         def eCtrl = mockFor(ReviewService)
-        eCtrl.demand.createBlankReview(2){x,y->trParams << y;tmParams<<x;new Review()}
+        eCtrl.demand.createBlankReview(2){r,t->trParams << r;tmParams=t;new Review()}
         def trs = new TeamReviewService()
         trs.reviewService = eCtrl.createMock()
         def tr = trs.createTeamReview('foo',peopleToReview)
         def paramCompare = [tr,tr]
         assertEquals 'foo',tr.name
 
-        assertEquals paramCompare, trParams
+        assertEquals peopleToReview, trParams
         assertEquals peopleToReview,tmParams
 
         assertEquals 2,tr.reviews.size()

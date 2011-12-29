@@ -45,7 +45,9 @@
                                     <g:textField name="name" value="${teamReviewInstance?.name}" />
                                 </td>
                             </tr>
-                        
+                            <g:each var="teamMember" status="i" in="${teamMembers}">
+                                <tr><td><g:checkBox name="teamMembers" value="${teamMember.id}"/></td><td>${teamMember.name}</td></tr>
+                            </g:each>
                         </tbody>
                     </table>
                 </div>

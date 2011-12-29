@@ -1,5 +1,5 @@
 
-<%@ page import="org.surveyresults.Review" %>
+<%@ page import="org.agilereview.Review" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

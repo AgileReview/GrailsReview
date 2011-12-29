@@ -1,6 +1,6 @@
 
 
-<%@ page import="org.surveyresults.Response" %>
+<%@ page import="org.agilereview.Response" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -33,7 +33,7 @@
                                     <label for="answer"><g:message code="response.answer.label" default="Answer" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: responseInstance, field: 'answer', 'errors')}">
-                                    <g:select name="answer.id" from="${org.surveyresults.Answer.list()}" optionKey="id" value="${responseInstance?.answer?.id}"  />
+                                    <g:select name="answer.id" from="${org.agilereview.Answer.list()}" optionKey="id" value="${responseInstance?.answer?.id}"  />
                                 </td>
                             </tr>
                         
@@ -42,7 +42,7 @@
                                     <label for="question"><g:message code="response.question.label" default="Question" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: responseInstance, field: 'question', 'errors')}">
-                                    <g:select name="question.id" from="${org.surveyresults.Question.list()}" optionKey="id" value="${responseInstance?.question?.id}"  />
+                                    <g:select name="question.id" from="${org.agilereview.Question.list()}" optionKey="id" value="${responseInstance?.question?.id}"  />
                                 </td>
                             </tr>
                         
@@ -51,7 +51,7 @@
                                     <label for="review"><g:message code="response.review.label" default="Review" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: responseInstance, field: 'review', 'errors')}">
-                                    <g:select name="review.id" from="${org.surveyresults.Review.list()}" optionKey="id" value="${responseInstance?.review?.id}"  />
+                                    <g:select name="review.id" from="${org.agilereview.Review.list()}" optionKey="id" value="${responseInstance?.review?.id}"  />
                                 </td>
                             </tr>
                         

@@ -2,11 +2,15 @@
 
 <html>
     <head>
-         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<meta name="layout" content="main" />
-<title>User Login</title>
-</head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="layout" content="main" />
+
+        <title>Login</title>
+    </head>
 <body>
+    <g:if test="${flash.message}">
+    	<div class="message">${flash.message}</div>
+    </g:if>
         <div class="body">
            <g:form action="doLogin" method="post">
                <div class="dialog">

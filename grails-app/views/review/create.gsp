@@ -1,6 +1,6 @@
 
 
-<%@ page import="org.surveyresults.Review" %>
+<%@ page import="org.agilereview.Review" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -33,7 +33,7 @@
                                     <label for="person"><g:message code="review.person.label" default="Person" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: reviewInstance, field: 'person', 'errors')}">
-                                    <g:select name="person.id" from="${org.surveyresults.Person.list()}" optionKey="id" value="${reviewInstance?.person?.id}"  />
+                                    <g:select name="person.id" from="${org.agilereview.Person.list()}" optionKey="id" value="${reviewInstance?.person?.id}"  />
                                 </td>
                             </tr>
                         

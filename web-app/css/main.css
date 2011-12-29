@@ -12,12 +12,20 @@ html * {
 }
 
 body {
-    background: #fff;
+    background: #C0C0C0;
     color: #333;
     font: 11px verdana, arial, helvetica, sans-serif;
+    margin: 0px;
+    padding:0px;
+    text-align:center;
+
 }
-#grailsLogo {
-	padding:20px;
+#arLogo {
+    background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;
+    border: 1px solid #ccc;
+    padding: 7px 12px;
+    margin-bottom: 10px;
+    font-size: large;
 }
 
 a:link, a:visited, a:hover {
@@ -57,6 +65,15 @@ input:focus, select:focus, textarea:focus {
     border: 1px solid #b2d1ff;
 }
 
+#container{
+    display:block;
+    text-align:left;
+    width:800px;
+    height:1000px;
+    margin: 0 auto;
+    background-color: #FFFFFF;
+}
+
 .body {
     float: left;
     margin: 0 15px 10px 15px;
@@ -65,9 +82,9 @@ input:focus, select:focus, textarea:focus {
 /* NAVIGATION MENU */
 
 .nav {
-    background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;
-    border: 1px solid #ccc;
-    border-style: solid none solid none;
+    /*background: #fff url(../images/skin/shadow.jpg) bottom repeat-x;   */
+    border-bottom: 1px solid #ccc;
+    border-bottom-style: solid none solid none;
     margin-top: 5px;
     padding: 7px 12px;
 }
@@ -137,7 +154,6 @@ td.errors textarea {
 
 table {
     border: 1px solid #ccc;
-    width: 100%
 }
 tr {
     border: 0;

@@ -1,4 +1,4 @@
-import org.surveyresults.*
+import org.agilereview.*
 includeTargets << grailsScript("_GrailsBootstrap")
 
 target(main: "Uploads survey results from a text file") {

@@ -11,6 +11,15 @@ class EvaluationTests extends GrailsUnitTestCase {
     protected void tearDown() {
         super.tearDown()
     }
+
+    void test_comments_max_size_is_validated(){
+        def comments
+        1001.times{comments += 'A'}
+        mockDomain(Evaluation,[])
+        def evaluation = new Evaluation(comments:comments)
+        assertEquals false,evaluation.validate()
+        assertEquals evaluation.errors.getFieldError('comments').code,'maxSize.exceeded'
+    }
 	
 	void test_params_can_deep_save(){
 		mockDomain(Question,[new Question(id:1,text:'foo'),new Question(id:2,text:'bar')])

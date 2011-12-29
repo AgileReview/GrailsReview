@@ -26,7 +26,7 @@ class Evaluation {
 	
 	
 	static constraints = {
-		comments(nullable:true)
+		comments(nullable:true,maxSize: 1000)
 		responses(validator: {val, obj ->
 			if ((val.findAll{resp -> resp.answer == null}.size() > 0) && obj.complete) 
 				return ['incomplete.evaluation']

@@ -148,7 +148,7 @@ databaseChangeLog = {
 				constraints(nullable: "false")
 			}
 
-			column(name: "pass", type: "varchar(255)") {
+			column(name: "password", type: "varchar(255)") {
 				constraints(nullable: "false")
 			}
 

@@ -51,16 +51,21 @@ class BootStrap {
 	
 	def initReviews(){
 		println 'creating a dummy incomplete review'
-		def incompleteReview = new TeamReview(name:'inCompleteReview')
+        def nonManagers = TeamMember.findAllByRoleNotEqual(Role.findByName('Manager'))
+        def trs = new TeamReviewService()
+        def rs = new ReviewService()
+        def es = new EvaluationService()
+        rs.evaluationService = es
+        trs.reviewService = rs
+        
+		def incompleteReview = trs.createTeamReview('incomplete review',nonManagers)
 		incompleteReview.save(failOnError:true)
-		def rs = new ReviewService()
-		rs.evaluationService = new EvaluationService()
-		TeamMember.list().each { t-> rs.createBlankReview(t,incompleteReview).save(failOnError:true)}
+		
+
 		println 'creating a dummy completed team review'
-		def completeReview = new TeamReview(name:'completeReview')
+		def completeReview = trs.createTeamReview('complete review',nonManagers)
 		completeReview.save(failOnError:true)
-		rs.evaluationService = new EvaluationService()
-		TeamMember.list().each { t-> rs.createBlankReview(t,completeReview).save(failOnError:true)}
+
 		//answer all the questions
 		completeReview.reviews.each { review->review.evaluations.each { eval->completeEvaluation(eval)}}
 	}
